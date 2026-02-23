@@ -121,7 +121,7 @@ export function InsightCard({ initialInsight }: { initialInsight: Insight }) {
                         opacity: 0.8,
                         fontSize: '0.95rem'
                     }}>
-                        "{quote}"
+                        &quot;{quote}&quot;
                     </blockquote>
                 )}
 

@@ -4,8 +4,6 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import {
-    PlusCircle,
-    ArrowRight,
     Video,
     Zap,
     CheckCircle2,
@@ -42,6 +40,7 @@ export default function LandingPage() {
                 alert(result.error);
             }
         } catch (err) {
+            console.error(err);
             alert("Something went wrong. Please try again.");
         } finally {
             setLoading(false);
@@ -80,7 +79,7 @@ export default function LandingPage() {
                         Get Early Access — Free for Beta
                     </button>
                     <div className="lp-social-proof">
-                        "Integrates with Fireflies, Fathom, and Jira in 60 seconds."
+                        &quot;Integrates with Fireflies, Fathom, and Jira in 60 seconds.&quot;
                     </div>
                 </div>
             </header>
@@ -89,7 +88,7 @@ export default function LandingPage() {
             <section className="lp-section lp-container animate-fade-in">
                 <div className="lp-section-header">
                     <span className="lp-badge" style={{ background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', borderColor: 'rgba(239, 68, 68, 0.2)' }}>The Pain</span>
-                    <h2 style={{ fontSize: '2.5rem', fontWeight: 800 }}>The "Product Manager's Paradox"</h2>
+                    <h2 style={{ fontSize: '2.5rem', fontWeight: 800 }}>The &quot;Product Manager&apos;s Paradox&quot;</h2>
                 </div>
 
                 <div className="lp-problem-grid">
@@ -100,8 +99,8 @@ export default function LandingPage() {
                     </div>
                     <div className="lp-problem-card">
                         <Search className="lp-primary" style={{ marginBottom: '16px' }} />
-                        <h4>Hidden "Aha!" Moments</h4>
-                        <p>Critical feedback is buried somewhere in those transcripts, but you don't have time to find them.</p>
+                        <h4>Hidden &quot;Aha!&quot; Moments</h4>
+                        <p>Critical feedback is buried somewhere in those transcripts, but you don&apos;t have time to find them.</p>
                     </div>
                     <div className="lp-problem-card">
                         <Zap className="lp-primary" style={{ marginBottom: '16px' }} />
@@ -137,7 +136,7 @@ export default function LandingPage() {
                             <span className="lp-step-number">Step 02</span>
                             <h3 className="lp-step-headline">Evidence-Based Insights.</h3>
                             <p className="lp-step-body">
-                                Our AI doesn't just summarize; it finds the exact moment a user struggled and maps the friction with precision timestamps.
+                                Our AI doesn&apos;t just summarize; it finds the exact moment a user struggled and maps the friction with precision timestamps.
                             </p>
                         </div>
                         <div className="lp-step-visual">
@@ -177,16 +176,16 @@ export default function LandingPage() {
                     </div>
                     <div className="lp-feature-card">
                         <div className="lp-feature-icon"><LinkIcon size={24} /></div>
-                        <h3>The "Receipts" Link</h3>
+                        <h3>The &quot;Receipts&quot; Link</h3>
                         <p style={{ color: '#a1a1aa', marginTop: '12px' }}>
-                            Every Jira ticket includes a direct timestamp link. No more "I can't reproduce this" from developers.
+                            Every Jira ticket includes a direct timestamp link. No more &quot;I can&apos;t reproduce this&quot; from developers.
                         </p>
                     </div>
                     <div className="lp-feature-card">
                         <div className="lp-feature-icon"><Users size={24} /></div>
                         <h3>Bi-Directional Sync</h3>
                         <p style={{ color: '#a1a1aa', marginTop: '12px' }}>
-                            When the ticket hits "Done" in Jira, we notify you so you can close the loop with the customer instantly.
+                            When the ticket hits &quot;Done&quot; in Jira, we notify you so you can close the loop with the customer instantly.
                         </p>
                     </div>
                 </div>
@@ -198,7 +197,7 @@ export default function LandingPage() {
                     Help us build the future of <br />Product Discovery.
                 </h2>
                 <p style={{ fontSize: '1.25rem', color: '#a1a1aa', maxWidth: '800px', margin: '0 auto' }}>
-                    "We are looking for <strong>5 Product Managers</strong> to join our founding beta. You'll get free access for life and direct influence over our feature roadmap."
+                    &quot;We are looking for <strong>5 Product Managers</strong> to join our founding beta. You&apos;ll get free access for life and direct influence over our feature roadmap.&quot;
                 </p>
 
                 {!submitted ? (
