@@ -23,6 +23,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to Render
-        if: secrets.RENDER_DEPLOY_HOOK_URL != ''
         run: |
-          curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+          if [ -n "${{ secrets.RENDER_DEPLOY_HOOK_URL }}" ]; then
+            curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+          else
+            echo "Skipping Render deploy: RENDER_DEPLOY_HOOK_URL not set."
+          fi
