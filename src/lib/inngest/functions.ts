@@ -2,7 +2,7 @@
 import { inngest } from "./client";
 import { createAnthropic } from "@ai-sdk/anthropic";
 import { generateText } from "ai";
-import { createServiceClient } from "@/lib/supabase/service";
+import { createServiceClient } from "../supabase/service";
 
 // Initialize Anthropic provider explicitly
 const anthropic = createAnthropic({
