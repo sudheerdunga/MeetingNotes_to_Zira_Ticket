@@ -1,16 +1,18 @@
 
 import { NextResponse } from 'next/server';
-import { getTranscriptById, formatTranscript } from '@/services/fireflies';
-import { createServiceClient } from '@/lib/supabase/service';
+import { getTranscriptById, formatTranscript } from '../../../../services/fireflies';
+import { createServiceClient } from '../../../../lib/supabase/service';
 
 export async function POST(req: Request) {
     try {
-        const payload: any = await req.json();
+        const payload = (await req.json()) as Record<string, unknown>;
         console.log('📥 Received Fireflies Webhook:', JSON.stringify(payload, null, 2));
 
         // Fireflies webhook sends: eventType, transcriptId/meetingId, and organizer info
-        const { transcriptId, meetingId, organizer_email } = payload;
-        const id = (transcriptId || meetingId) as string;
+        const transcriptId = payload.transcriptId as string | undefined;
+        const meetingId = payload.meetingId as string | undefined;
+        const organizer_email = payload.organizer_email as string | undefined;
+        const id = (transcriptId || meetingId);
 
         if (!id) {
             console.error('❌ No transcript ID found in payload');
@@ -71,7 +73,7 @@ export async function POST(req: Request) {
 
         // Trigger Inngest background job for AI processing
         console.log('🚀 Triggering Inngest job for UX insights processing...');
-        const { inngest } = await import('@/lib/inngest/client');
+        const { inngest } = await import('../../../../lib/inngest/client');
         await inngest.send({
             name: 'meetings.created',
             data: {
@@ -88,10 +90,10 @@ export async function POST(req: Request) {
             meetingId: meeting.id,
             message: 'Meeting imported and queued for analysis'
         });
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error('❌ Webhook Error:', error);
         return NextResponse.json({
-            error: error instanceof Error ? error.message : String(error),
+            error: error instanceof Error ? error.message : "Unknown error",
             stack: process.env.NODE_ENV === 'development' && error instanceof Error ? error.stack : undefined
         }, { status: 500 });
     }

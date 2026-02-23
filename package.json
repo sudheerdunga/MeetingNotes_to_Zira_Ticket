@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build --turbopack && tsc src/worker.ts --outDir dist --esModuleInterop --module commonjs --target es2017 --moduleResolution node --skipLibCheck",
+    "build": "next build --turbopack && (rm -rf dist && tsc src/worker.ts --outDir dist --esModuleInterop --module commonjs --target es2017 --moduleResolution node --skipLibCheck)",
     "start": "next start",
     "start:worker": "node dist/worker.js",
     "lint": "eslint"
