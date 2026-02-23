@@ -1,0 +1,37 @@
+services:
+  # 1. The Background Worker (Inngest Worker)
+  # Changed to 'web' type so it can receive Inngest webhooks via HTTP
+  - type: web
+    name: kodasync-worker
+    runtime: node
+    plan: starter
+    buildCommand: npm install && npm run build
+    startCommand: npm run start:worker
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NEXT_PUBLIC_SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: INNGEST_EVENT_KEY
+        sync: false
+      - key: INNGEST_SIGNING_KEY
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: AUTH_JIRA_ID
+        sync: false
+      - key: AUTH_JIRA_SECRET
+        sync: false
+      - key: AUTH_SECRET
+        sync: false
+      - key: AUTH_URL
+        value: https://kodasync.app
+
+# 2. Optional: Managed PostgreSQL (If not using Supabase)
+# We use Supabase, so this is optional but kept for blueprint compatibility
+# databases:
+#   - name: kodasync-db
+#     plan: free
