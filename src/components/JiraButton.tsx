@@ -20,8 +20,9 @@ export function JiraButton({ insightId, hasTicket }: { insightId: string; hasTic
             if (!result.success) {
                 setError(result.error || "Failed to push to Jira");
             }
-        } catch (err: any) {
-            setError(err.message || "An unexpected error occurred");
+        } catch (err: unknown) {
+            const message = err instanceof Error ? err.message : String(err);
+            setError(message || "An unexpected error occurred");
         } finally {
             setLoading(false);
         }

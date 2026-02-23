@@ -145,8 +145,9 @@ export async function pushToJira(insightId: string) {
 
         return { success: true, issueKey };
 
-    } catch (err: any) {
+    } catch (err: unknown) {
+        const message = err instanceof Error ? err.message : String(err);
         console.error("pushToJira error:", err);
-        return { success: false, error: err.message };
+        return { success: false, error: message };
     }
 }

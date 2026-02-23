@@ -5,12 +5,12 @@ import { createServiceClient } from '@/lib/supabase/service';
 
 export async function POST(req: Request) {
     try {
-        const payload = await req.json();
+        const payload: any = await req.json();
         console.log('📥 Received Fireflies Webhook:', JSON.stringify(payload, null, 2));
 
         // Fireflies webhook sends: eventType, transcriptId/meetingId, and organizer info
-        const { eventType, transcriptId, meetingId, organizer_email } = payload;
-        const id = transcriptId || meetingId;
+        const { transcriptId, meetingId, organizer_email } = payload;
+        const id = (transcriptId || meetingId) as string;
 
         if (!id) {
             console.error('❌ No transcript ID found in payload');
@@ -37,36 +37,13 @@ export async function POST(req: Request) {
         // User Association Strategy:
         // 1. If organizer_email is provided, try to find matching user
         // 2. For now, we'll use a system user as fallback
-        // 3. TODO: Implement proper user lookup via NextAuth User table or create a mapping table
         let userId: string | null = null;
 
         if (organizer_email) {
-            console.log(`🔍 Looking up user by email: ${organizer_email}`);
-
-            // Since NextAuth doesn't expose a direct user lookup by email in the default setup,
-            // we'll need to either:
-            // A) Create a user mapping table in Supabase
-            // B) Use the first authenticated user for testing
-            // C) Use a system user (current approach)
-
-            // For production, you should create a user_mappings table:
-            // CREATE TABLE user_mappings (
-            //   email text primary key,
-            //   user_id text not null
-            // );
-
-            // Then query it here:
-            // const { data: mapping } = await supabase
-            //   .from('user_mappings')
-            //   .select('user_id')
-            //   .eq('email', organizer_email)
-            //   .single();
-
             console.warn(`⚠️ User lookup not yet implemented. Using system user.`);
         }
 
         // Use system user for webhook imports
-        // This allows meetings to be imported and later associated with users
         if (!userId) {
             console.log('⚠️ Using system user for Fireflies import');
             userId = 'system-fireflies-import';
@@ -114,8 +91,8 @@ export async function POST(req: Request) {
     } catch (error: any) {
         console.error('❌ Webhook Error:', error);
         return NextResponse.json({
-            error: error.message,
-            stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+            error: error instanceof Error ? error.message : String(error),
+            stack: process.env.NODE_ENV === 'development' && error instanceof Error ? error.stack : undefined
         }, { status: 500 });
     }
 }

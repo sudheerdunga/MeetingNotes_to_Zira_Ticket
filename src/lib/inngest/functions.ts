@@ -62,8 +62,8 @@ Output: Structured JSON.`;
                 });
                 console.log("Claude analysis successful");
                 return result.text;
-            } catch (error: any) {
-                console.error("Anthropic API Error Details:", JSON.stringify(error, Object.getOwnPropertyNames(error), 2));
+            } catch (error: unknown) {
+                console.error("Anthropic API Error Details:", error);
                 throw error;
             }
         });
