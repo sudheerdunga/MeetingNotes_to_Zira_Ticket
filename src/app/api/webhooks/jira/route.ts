@@ -10,6 +10,11 @@ import { createServiceClient } from '@/lib/supabase/service';
  * we update the corresponding insight in KodaSync to 'resolved'
  * and send a real-time toast notification via Supabase Realtime.
  */
+
+export async function GET() {
+    return NextResponse.json({ message: "Jira Webhook endpoint is active and waiting for POST requests." });
+}
+
 export async function POST(req: Request) {
     try {
         const payload = await req.json();
