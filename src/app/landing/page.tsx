@@ -51,7 +51,7 @@ export default function LandingPage() {
         <div className="lp-body">
             {/* Navigation */}
             <nav className="lp-nav lp-container">
-                <Link href="/" className="lp-logo">InsightLoop</Link>
+                <Link href="/" className="lp-logo">KodaSync</Link>
                 <div className="lp-nav-actions">
                     <Link href="/login" className="lp-btn-ghost">Login</Link>
                     <button onClick={() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })} className="lp-btn-primary">
@@ -68,7 +68,7 @@ export default function LandingPage() {
                     <span style={{ color: 'var(--lp-primary)' }}>Start Fixing What’s Broken.</span>
                 </h1>
                 <p className="lp-hero-subheadline">
-                    InsightLoop automatically extracts high-signal friction points from your Fireflies or Fathom calls and turns them into ready-to-code Jira tickets.
+                    KodaSync automatically extracts high-signal friction points from your Fireflies or Fathom calls and turns them into ready-to-code Jira tickets.
                 </p>
                 <div className="lp-hero-cta-group">
                     <button
@@ -224,7 +224,7 @@ export default function LandingPage() {
             </section>
 
             <footer className="lp-container" style={{ padding: '40px 0', borderTop: '1px solid var(--lp-border)', textAlign: 'center', opacity: 0.5, fontSize: '0.9rem' }}>
-                &copy; 2026 InsightLoop. All rights reserved. Built for modern product teams.
+                &copy; 2026 KodaSync. All rights reserved. Built for modern product teams.
             </footer>
         </div>
     );

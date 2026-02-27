@@ -19,7 +19,7 @@ export function Sidebar({ session }: { session: Session }) {
 
     return (
         <aside className="sidebar">
-            <h1>InsightLoop</h1>
+            <h1>KodaSync</h1>
             <nav className="nav-links">
                 {navItems.map((item) => {
                     const isActive = pathname === item.href;

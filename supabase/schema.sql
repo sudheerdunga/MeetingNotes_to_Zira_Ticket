@@ -16,6 +16,7 @@ create table if not exists insights (
   severity text check (severity in ('low', 'medium', 'high', 'critical')),
   jira_ticket_id text,
   status text check (status in ('open', 'resolved')) default 'open',
+  resolved_at timestamp with time zone,
   created_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
 

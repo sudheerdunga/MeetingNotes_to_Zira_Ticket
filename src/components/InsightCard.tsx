@@ -95,10 +95,16 @@ export function InsightCard({ initialInsight }: { initialInsight: Insight }) {
                         <Icon size={12} />
                         {insight.severity}
                     </div>
+                    {insight.jira_ticket_id && insight.status === 'open' && (
+                        <div style={{ color: 'var(--primary)', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.75rem', fontWeight: 600 }}>
+                            <Clock size={12} />
+                            IN JIRA
+                        </div>
+                    )}
                     {insight.status === 'resolved' && (
                         <div style={{ color: '#00c853', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.75rem', fontWeight: 600 }}>
                             <CheckCircle2 size={12} />
-                            TRACKED
+                            RESOLVED
                         </div>
                     )}
                 </div>

@@ -133,7 +133,7 @@ export async function pushToJira(insightId: string) {
         // Update database
         const { error: updateError } = await supabase
             .from("insights")
-            .update({ jira_ticket_id: issueKey, status: 'resolved' }) // Marking as resolved since it's now tracked in Jira
+            .update({ jira_ticket_id: issueKey }) // Link the ticket, but don't resolve yet
             .eq("id", insightId);
 
         if (updateError) {

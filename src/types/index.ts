@@ -15,5 +15,6 @@ export interface Insight {
     severity: 'low' | 'medium' | 'high' | 'critical'
     jira_ticket_id: string | null
     status: 'open' | 'resolved'
+    resolved_at?: string | null
     created_at: string
 }

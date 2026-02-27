@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
+import { NotificationListener } from "@/components/NotificationListener";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -14,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "InsightLoop",
+  title: "KodaSync",
   description: "Meeting insights and tracking",
 };
 
@@ -27,6 +28,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         {children}
+        <NotificationListener />
       </body>
       <Script
         src="https://www.googletagmanager.com/gtag/js?id=G-L0MQG65CFH"

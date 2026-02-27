@@ -25,7 +25,7 @@ export default async function LoginPage() {
                             </defs>
                         </svg>
                     </div>
-                    <h1 className={styles.title}>Welcome to InsightLoop</h1>
+                    <h1 className={styles.title}>Welcome to KodaSync</h1>
                     <p className={styles.subtitle}>
                         Transform your meetings into actionable insights
                     </p>

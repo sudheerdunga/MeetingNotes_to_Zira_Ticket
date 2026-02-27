@@ -1,7 +1,7 @@
 # Fireflies AI Integration Guide
 
 ## 🎯 Overview
-This guide explains how to set up and test the Fireflies AI webhook integration for automatically importing meeting transcripts into InsightLoop.
+This guide explains how to set up and test the Fireflies AI webhook integration for automatically importing meeting transcripts into KodaSync.
 
 ## 🔧 Setup Steps
 
