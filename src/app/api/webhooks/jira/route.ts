@@ -18,19 +18,21 @@ export async function POST(req: Request) {
         console.log(`📥 Received Jira Webhook: ${webhookEvent || 'unknown'}`);
 
         // Only process issue update events
-        if (webhookEvent === 'jira:issue_updated') {
+        if (webhookEvent === 'jira:issue_updated' || webhookEvent === 'jira:issue_created') {
             const issueKey = issue?.key;
             const statusName = issue?.fields?.status?.name;
+            const eventType = payload.issue_event_type_name; // e.g. 'issue_generic' or 'issue_updated'
 
-            console.log(`🔍 Issue ${issueKey} updated. Current status: "${statusName}"`);
+            console.log(`🔍 [DEBUG] Issue: ${issueKey} | Status: "${statusName}" | Event: ${webhookEvent} | Intent: ${eventType}`);
 
-            // Check if the status has changed to 'Done' or 'Resolved'
-            // NOTE: Status names can vary based on Jira project configurations, 
-            // but 'Done' and 'Resolved' are the standard completions.
-            if (statusName === 'Done' || statusName === 'Resolved') {
+            // Broaden the status check to be case-insensitive and include 'Closed'
+            const completedStatuses = ['done', 'resolved', 'closed', 'completed'];
+            const normalizedStatus = statusName?.toLowerCase() || '';
+
+            if (completedStatuses.includes(normalizedStatus)) {
                 const supabase = createServiceClient();
 
-                console.log(`✅ Status "${statusName}" detected. Resolving insight for ticket: ${issueKey}`);
+                console.log(`✅ Status "${statusName}" recognized as completed. Resolving insight for ticket: ${issueKey}`);
 
                 // 1. Update the Insight in Supabase
                 const { data, error } = await supabase
