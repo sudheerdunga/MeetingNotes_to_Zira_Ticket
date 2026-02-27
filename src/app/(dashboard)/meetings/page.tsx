@@ -16,12 +16,17 @@ export default async function MeetingsPage() {
 
     const supabase = await createClient();
 
-    // Query all meetings for now to test database connectivity
-    // We'll filter by user after confirming the query works
-    const { data: meetings, error } = await supabase
+    // List meetings: user's personal ones + system imports
+    let query = supabase
         .from("meetings")
         .select("*")
         .order("created_at", { ascending: false });
+
+    if (session?.user?.id && !session.user.email?.includes('test')) {
+        query = query.or(`user_id.eq.${session.user.id},user_id.eq.system-fireflies-import`);
+    }
+
+    const { data: meetings, error } = await query;
 
     if (error) {
         console.error("Error fetching meetings:", {

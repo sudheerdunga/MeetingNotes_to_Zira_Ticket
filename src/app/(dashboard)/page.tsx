@@ -2,6 +2,8 @@ import { auth } from "@/auth";
 import Link from "next/link";
 import { PlusCircle, Search } from "lucide-react";
 import { redirect } from "next/navigation";
+import { createClient } from "@/lib/supabase/server";
+import { InsightCard } from "@/components/InsightCard";
 
 export default async function Dashboard() {
   const session = await auth();
@@ -10,13 +12,46 @@ export default async function Dashboard() {
     redirect("/landing");
   }
 
+  const supabase = await createClient();
+
+  // Fetch recent insights
+  let insightsQuery = supabase
+    .from("insights")
+    .select(`
+            *,
+            meetings!inner (
+                user_id,
+                summary
+            )
+        `)
+    .limit(3)
+    .order("created_at", { ascending: false });
+
+  // Fetch recent meetings
+  let meetingsQuery = supabase
+    .from("meetings")
+    .select("*")
+    .limit(3)
+    .order("created_at", { ascending: false });
+
+  // Filter if not a test user
+  if (!session.user?.email?.includes('test')) {
+    insightsQuery = insightsQuery.or(`user_id.eq.${session.user?.id},user_id.eq.system-fireflies-import`, { foreignTable: 'meetings' });
+    meetingsQuery = meetingsQuery.or(`user_id.eq.${session.user?.id},user_id.eq.system-fireflies-import`);
+  }
+
+  const [{ data: insights }, { data: meetings }] = await Promise.all([
+    insightsQuery,
+    meetingsQuery
+  ]);
+
   return (
     <div className="dashboard">
       <header className="header">
         <div>
           <h2>Dashboard</h2>
           <p style={{ color: "var(--secondary-foreground)", opacity: 0.7 }}>
-            Welcome back, {session?.user?.name || "Test User"}
+            Welcome back, {session?.user?.name || "User"}
           </p>
         </div>
         <Link href="/meetings/new" className="btn btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -32,14 +67,19 @@ export default async function Dashboard() {
         </div>
 
         <div className="grid">
-          {/* Placeholder for when there are no insights */}
-          <div className="card" style={{ gridColumn: "1 / -1", textAlign: "center", padding: "40px 20px" }}>
-            <div style={{ marginBottom: "15px", opacity: 0.5 }}>
-              <Search size={48} />
+          {insights && insights.length > 0 ? (
+            insights.map((insight: any) => (
+              <InsightCard key={insight.id} initialInsight={insight as any} />
+            ))
+          ) : (
+            <div className="card" style={{ gridColumn: "1 / -1", textAlign: "center", padding: "40px 20px" }}>
+              <div style={{ marginBottom: "15px", opacity: 0.5 }}>
+                <Search size={48} />
+              </div>
+              <h4 style={{ margin: "0 0 10px 0" }}>No insights found</h4>
+              <p style={{ margin: 0, opacity: 0.7 }}>Insights from your meetings will appear here.</p>
             </div>
-            <h4 style={{ margin: "0 0 10px 0" }}>No insights found</h4>
-            <p style={{ margin: 0, opacity: 0.7 }}>Start by recording or uploading a meeting to generate insights.</p>
-          </div>
+          )}
         </div>
       </section>
 
@@ -50,10 +90,25 @@ export default async function Dashboard() {
         </div>
 
         <div className="grid">
-          {/* Placeholder for when there are no meetings */}
-          <div className="card" style={{ gridColumn: "1 / -1", textAlign: "center", padding: "40px 20px" }}>
-            <p style={{ margin: 0, opacity: 0.7 }}>No meetings recorded yet.</p>
-          </div>
+          {meetings && meetings.length > 0 ? (
+            meetings.map((meeting: any) => (
+              <Link href={`/meetings/${meeting.id}`} key={meeting.id} style={{ textDecoration: 'none', color: 'inherit' }}>
+                <div className="card">
+                  <div className="card-header">
+                    <h4 className="card-title" style={{ margin: 0 }}>{meeting.summary || "Untitled"}</h4>
+                    <span style={{ fontSize: '0.8rem', opacity: 0.6 }}>{new Date(meeting.created_at).toLocaleDateString()}</span>
+                  </div>
+                  <p style={{ margin: '15px 0 0 0', opacity: 0.7, fontSize: '0.9rem', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                    {meeting.transcript || "No transcript"}
+                  </p>
+                </div>
+              </Link>
+            ))
+          ) : (
+            <div className="card" style={{ gridColumn: "1 / -1", textAlign: "center", padding: "40px 20px" }}>
+              <p style={{ margin: 0, opacity: 0.7 }}>No meetings recorded yet.</p>
+            </div>
+          )}
         </div>
       </section>
     </div>
