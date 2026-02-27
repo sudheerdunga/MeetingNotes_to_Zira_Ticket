@@ -49,31 +49,31 @@ async function getJiraContext(accessToken: string) {
 }
 
 export async function pushToJira(insightId: string) {
-    const session = await auth();
-    if (!session?.jiraAccessToken) {
-        throw new Error("Jira account not connected");
-    }
-
-    const supabase = await createClient();
-
-    // Fetch insight and meeting details
-    const { data: insight, error: insightError } = await supabase
-        .from("insights")
-        .select(`
-            *,
-            meetings (*)
-        `)
-        .eq("id", insightId)
-        .single();
-
-    if (insightError || !insight) {
-        throw new Error("Insight not found");
-    }
-
-    const meeting = insight.meetings;
-    const accessToken = session.jiraAccessToken;
-
     try {
+        const session = await auth();
+        if (!session?.jiraAccessToken) {
+            return { success: false, error: "Jira account not connected. Please log in again." };
+        }
+
+        const supabase = await createClient();
+
+        // Fetch insight and meeting details
+        const { data: insight, error: insightError } = await supabase
+            .from("insights")
+            .select(`
+                *,
+                meetings (*)
+            `)
+            .eq("id", insightId)
+            .single();
+
+        if (insightError || !insight) {
+            return { success: false, error: "Insight not found in database." };
+        }
+
+        const meeting = (insight as any).meetings;
+        const accessToken = session.jiraAccessToken;
+
         const { cloudId, projectKey } = await getJiraContext(accessToken);
 
         // Build User Story and Description logic
@@ -125,7 +125,10 @@ export async function pushToJira(insightId: string) {
 
         if (!createIssueResponse.ok) {
             console.error("Jira API Error:", result);
-            throw new Error(result.errors ? Object.values(result.errors).join(", ") : "Failed to create Jira issue");
+            return {
+                success: false,
+                error: result.errors ? Object.values(result.errors).join(", ") : "Jira API rejected the request."
+            };
         }
 
         const issueKey = result.key;
@@ -137,7 +140,7 @@ export async function pushToJira(insightId: string) {
             .eq("id", insightId);
 
         if (updateError) {
-            throw updateError;
+            return { success: false, error: "Issue created in Jira, but failed to update local database." };
         }
 
         revalidatePath("/insights");
@@ -147,7 +150,7 @@ export async function pushToJira(insightId: string) {
 
     } catch (err: unknown) {
         const message = err instanceof Error ? err.message : String(err);
-        console.error("pushToJira error:", err);
-        return { success: false, error: message };
+        console.error("pushToJira critical error:", err);
+        return { success: false, error: `Critical Error: ${message}` };
     }
 }
