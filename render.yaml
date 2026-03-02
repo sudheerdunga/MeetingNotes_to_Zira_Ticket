@@ -5,7 +5,7 @@ services:
     name: kodasync-worker
     runtime: node
     plan: starter
-    buildCommand: npm install && npm run build
+    buildCommand: npm install && npm run build && npm run build:worker
     startCommand: npm run start:worker
     healthCheckPath: /health
     envVars:
