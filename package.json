@@ -5,9 +5,9 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
-    "build:worker": "rm -rf dist && tsc src/worker.ts --outDir dist --esModuleInterop --module commonjs --target es2017 --moduleResolution node --skipLibCheck",
+    "build:worker": "rm -rf dist && tsc worker/index.ts --outDir dist --esModuleInterop --module commonjs --target es2017 --moduleResolution node --skipLibCheck",
     "start": "next start",
-    "start:worker": "node dist/worker.js",
+    "start:worker": "node dist/index.js",
     "lint": "eslint"
   },
   "dependencies": {

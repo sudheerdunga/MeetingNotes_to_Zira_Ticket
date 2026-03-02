@@ -1,8 +1,8 @@
 
-import { inngest } from "./client";
+import { inngest } from "../src/lib/inngest/client";
 import { createAnthropic } from "@ai-sdk/anthropic";
 import { generateText } from "ai";
-import { createServiceClient } from "../supabase/service";
+import { createServiceClient } from "../src/lib/supabase/service";
 
 const anthropic = createAnthropic({
     apiKey: process.env.ANTHROPIC_API_KEY,

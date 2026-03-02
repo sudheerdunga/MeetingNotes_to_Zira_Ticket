@@ -1,9 +1,9 @@
 
 import { serve } from "inngest/node";
-import { inngest } from "./lib/inngest/client";
-import { processUxInsights } from "./lib/inngest/ux-insights";
-import { generateInsightEmbedding } from "./lib/inngest/embeddings";
-import { clusterInsight } from "./lib/inngest/clustering";
+import { inngest } from "../src/lib/inngest/client";
+import { processUxInsights } from "../src/lib/inngest/ux-insights";
+import { generateInsightEmbedding } from "./inngest/embeddings";
+import { clusterInsight } from "./inngest/clustering";
 import http from "http";
 
 const handler = serve({
@@ -23,5 +23,5 @@ const server = http.createServer((req, res) => {
 });
 
 server.listen(PORT, () => {
-    console.log(`[Worker] Listening on port ${PORT}`);
+    console.log(`[Worker] Listening on port ${PORT} - Isolated Mode`);
 });

@@ -1,6 +1,6 @@
 
-import { inngest } from "./client";
-import { createServiceClient } from "../supabase/service";
+import { inngest } from "../src/lib/inngest/client";
+import { createServiceClient } from "../src/lib/supabase/service";
 
 export const generateInsightEmbedding = inngest.createFunction(
     { id: "generate-insight-embedding" },
@@ -9,8 +9,8 @@ export const generateInsightEmbedding = inngest.createFunction(
         const { insightId, issue, meetingId } = event.data;
         const supabase = createServiceClient();
 
-        // Lazy load the heavy AI library
-        const { generateEmbedding } = await import("../ai/embeddings");
+        // Physically located in src, but only imported here in the worker folder
+        const { generateEmbedding } = await import("../src/lib/ai/embeddings");
 
         const embedding = await step.run("calculate-embedding", async () => {
             return await generateEmbedding(issue);
