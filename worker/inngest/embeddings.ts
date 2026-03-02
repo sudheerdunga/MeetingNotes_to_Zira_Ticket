@@ -9,8 +9,8 @@ export const generateInsightEmbedding = inngest.createFunction(
         const { insightId, issue, meetingId } = event.data;
         const supabase = createServiceClient();
 
-        // Physically located in src, but only imported here in the worker folder
-        const { generateEmbedding } = await import("../src/lib/ai/embeddings");
+        // Lazy load the heavy AI library from the local worker folder
+        const { generateEmbedding } = await import("../ai/embeddings");
 
         const embedding = await step.run("calculate-embedding", async () => {
             return await generateEmbedding(issue);
