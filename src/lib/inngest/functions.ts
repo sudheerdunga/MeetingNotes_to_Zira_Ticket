@@ -1,9 +1,7 @@
-
 import { inngest } from "./client";
 import { createAnthropic } from "@ai-sdk/anthropic";
 import { generateText } from "ai";
 import { createServiceClient } from "../supabase/service";
-import { generateEmbedding } from "../ai/embeddings";
 
 // Initialize Anthropic provider explicitly
 const anthropic = createAnthropic({
@@ -96,14 +94,11 @@ Output: Structured JSON.`;
             // Map friction points
             if (analysis.friction_points) {
                 for (const fp of analysis.friction_points) {
-                    const issueContent = `[Friction] ${fp.topic}: "${fp.quote}" (${fp.timestamp})`;
-                    const embedding = await generateEmbedding(issueContent);
                     insightsToInsert.push({
                         meeting_id: meetingId,
-                        issue: issueContent,
+                        issue: `[Friction] ${fp.topic}: "${fp.quote}" (${fp.timestamp})`,
                         severity: fp.severity.toLowerCase() === 'med' ? 'medium' : fp.severity.toLowerCase() as 'low' | 'medium' | 'high' | 'critical',
                         status: 'open',
-                        embedding: embedding
                     });
                 }
             }
@@ -111,14 +106,11 @@ Output: Structured JSON.`;
             // Map feature requests
             if (analysis.feature_requests) {
                 for (const fr of analysis.feature_requests) {
-                    const issueContent = `[Feature Request] ${fr.feature}: ${fr.context}`;
-                    const embedding = await generateEmbedding(issueContent);
                     insightsToInsert.push({
                         meeting_id: meetingId,
-                        issue: issueContent,
+                        issue: `[Feature Request] ${fr.feature}: ${fr.context}`,
                         severity: fr.urgency.toLowerCase() === 'med' ? 'medium' : fr.urgency.toLowerCase() as 'low' | 'medium' | 'high' | 'critical',
                         status: 'open',
-                        embedding: embedding
                     });
                 }
             }
@@ -130,24 +122,20 @@ Output: Structured JSON.`;
                     throw error;
                 }
 
-                // Trigger clustering for each new insight
-                const { data: meetingData } = await supabase.from('meetings').select('user_id').eq('id', meetingId).single();
-
-                if (data && meetingData) {
+                if (data) {
                     for (const ins of data) {
                         await inngest.send({
-                            name: "insights.cluster",
+                            name: "insights.discovered",
                             data: {
                                 insightId: ins.id,
                                 issue: ins.issue,
-                                embedding: ins.embedding,
-                                userId: meetingData.user_id
+                                meetingId: meetingId
                             }
                         });
                     }
                 }
 
-                console.log(`Successfully inserted ${insightsToInsert.length} insights and triggered clustering`);
+                console.log(`Successfully inserted ${insightsToInsert.length} insights and triggered embedding generation`);
             }
 
             return { insertedCount: insightsToInsert.length };
@@ -158,6 +146,56 @@ Output: Structured JSON.`;
 
         console.log(`[Inngest] Function complete for meetingId: ${meetingId}. Total insights: ${frictionPointsCount + featureRequestsCount}`);
         return { success: true, insightCount: frictionPointsCount + featureRequestsCount };
+    }
+);
+
+export const generateInsightEmbedding = inngest.createFunction(
+    { id: "generate-insight-embedding" },
+    { event: "insights.discovered" },
+    async ({ event, step }) => {
+        const { insightId, issue, meetingId } = event.data;
+        const supabase = createServiceClient();
+
+        // 1. Import generateEmbedding dynamically here to keep it out of shared bundle if possible
+        const { generateEmbedding } = await import("../ai/embeddings");
+
+        const embedding = await step.run("calculate-embedding", async () => {
+            return await generateEmbedding(issue);
+        });
+
+        await step.run("update-insight-with-embedding", async () => {
+            const { error } = await supabase
+                .from('insights')
+                .update({ embedding })
+                .eq('id', insightId);
+
+            if (error) throw error;
+        });
+
+        // 2. Fetch user_id for clustering
+        const meetingData = await step.run("fetch-meeting-user", async () => {
+            const { data, error } = await supabase
+                .from('meetings')
+                .select('user_id')
+                .eq('id', meetingId)
+                .single();
+
+            if (error) throw error;
+            return data;
+        });
+
+        // 3. Trigger clustering
+        await inngest.send({
+            name: "insights.cluster",
+            data: {
+                insightId,
+                issue,
+                embedding,
+                userId: meetingData.user_id
+            }
+        });
+
+        return { success: true };
     }
 );
 

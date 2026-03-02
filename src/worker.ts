@@ -1,12 +1,12 @@
 import { serve } from "inngest/node";
 import { inngest } from "./lib/inngest/client";
-import { processUxInsights, clusterInsight } from "./lib/inngest/functions";
+import { processUxInsights, clusterInsight, generateInsightEmbedding } from "./lib/inngest/functions";
 import http from "http";
 
 // Serve Inngest functions using the Node.js adapter
 const handler = serve({
     client: inngest,
-    functions: [processUxInsights, clusterInsight],
+    functions: [processUxInsights, clusterInsight, generateInsightEmbedding],
 });
 
 const PORT = process.env.PORT || 3000;
