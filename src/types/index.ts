@@ -17,4 +17,16 @@ export interface Insight {
     status: 'open' | 'resolved'
     resolved_at?: string | null
     created_at: string
+    opportunity_id?: string | null
+}
+
+export interface Opportunity {
+    id: string
+    user_id: string
+    title: string
+    root_cause: string
+    sentiment_impact: string
+    status: 'active' | 'archived'
+    created_at: string
+    insights?: Insight[]
 }

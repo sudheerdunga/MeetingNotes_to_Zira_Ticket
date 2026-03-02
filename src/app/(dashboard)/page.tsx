@@ -4,6 +4,7 @@ import { PlusCircle, Search } from "lucide-react";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { InsightCard } from "@/components/InsightCard";
+import { OpportunityCard } from "@/components/OpportunityCard";
 
 export default async function Dashboard() {
   const session = await auth();
@@ -34,15 +35,28 @@ export default async function Dashboard() {
     .limit(3)
     .order("created_at", { ascending: false });
 
+  // Fetch Opportunities
+  let opportunitiesQuery = supabase
+    .from("opportunities")
+    .select(`
+        *,
+        insights (id, meeting_id)
+    `)
+    .eq('status', 'active')
+    .order("created_at", { ascending: false })
+    .limit(2);
+
   // Filter if not a test user
   if (!session.user?.email?.includes('test')) {
     insightsQuery = insightsQuery.or(`user_id.eq.${session.user?.id},user_id.eq.system-fireflies-import`, { foreignTable: 'meetings' });
     meetingsQuery = meetingsQuery.or(`user_id.eq.${session.user?.id},user_id.eq.system-fireflies-import`);
+    opportunitiesQuery = opportunitiesQuery.eq('user_id', session.user?.id);
   }
 
-  const [{ data: insights }, { data: meetings }] = await Promise.all([
+  const [{ data: insights }, { data: meetings }, { data: opportunities }] = await Promise.all([
     insightsQuery,
-    meetingsQuery
+    meetingsQuery,
+    opportunitiesQuery
   ]);
 
   return (
@@ -59,6 +73,29 @@ export default async function Dashboard() {
           New Meeting
         </Link>
       </header>
+
+      {/* NEW: Opportunities Section */}
+      <section style={{ marginBottom: "40px" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <h3 style={{ margin: 0 }}>Urgent Opportunities</h3>
+            <span style={{ backgroundColor: 'var(--primary)', color: 'var(--background)', fontSize: '0.7rem', padding: '2px 8px', borderRadius: '10px', fontWeight: 'bold' }}>AI CLUSTERED</span>
+          </div>
+          <Link href="/opportunities" style={{ fontSize: "0.9rem", color: "var(--primary)", textDecoration: "none" }}>View product roadmap</Link>
+        </div>
+
+        <div className="grid">
+          {opportunities && opportunities.length > 0 ? (
+            opportunities.map((opp) => (
+              <OpportunityCard key={opp.id} opportunity={opp as any} />
+            ))
+          ) : (
+            <div className="card" style={{ gridColumn: "1 / -1", textAlign: "center", padding: "40px 20px", border: '1px dashed var(--border)', background: 'transparent' }}>
+              <p style={{ margin: 0, opacity: 0.7 }}>No opportunities detected yet. AI will cluster insights as you add more meetings.</p>
+            </div>
+          )}
+        </div>
+      </section>
 
       <section style={{ marginBottom: "40px" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>

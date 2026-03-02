@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Video, Lightbulb, User, LogOut } from "lucide-react";
+import { LayoutDashboard, Video, Lightbulb, User, LogOut, FolderKanban } from "lucide-react";
 import { Session } from "next-auth";
 import { signOut, signIn } from "next-auth/react";
 
@@ -10,6 +10,7 @@ const navItems = [
     { name: "Dashboard", href: "/", icon: LayoutDashboard },
     { name: "Meetings", href: "/meetings", icon: Video },
     { name: "Insights", href: "/insights", icon: Lightbulb },
+    { name: "Roadmap", href: "/opportunities", icon: FolderKanban },
 ];
 
 export function Sidebar({ session }: { session: Session }) {
