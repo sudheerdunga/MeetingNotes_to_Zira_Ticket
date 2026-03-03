@@ -18,7 +18,7 @@ export async function GET() {
 export async function POST(req: Request) {
     try {
         const payload = await req.json();
-        const { webhookEvent, issue, changelog } = payload;
+        const { webhookEvent, issue } = payload;
 
         console.log(`📥 Received Jira Webhook: ${webhookEvent || 'unknown'}`);
 
@@ -80,11 +80,10 @@ export async function POST(req: Request) {
         }
 
         return NextResponse.json({ success: true, message: 'Webhook processed' });
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error('❌ Jira Webhook Critical Error:', error);
         return NextResponse.json({
-            error: error.message,
-            stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+            error: error instanceof Error ? error.message : 'Unknown error'
         }, { status: 500 });
     }
 }

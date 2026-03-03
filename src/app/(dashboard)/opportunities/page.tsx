@@ -40,7 +40,7 @@ export default async function OpportunitiesPage() {
             {opportunities && opportunities.length > 0 ? (
                 <div className="grid">
                     {opportunities.map((opp) => (
-                        <OpportunityCard key={opp.id} opportunity={opp as any} />
+                        <OpportunityCard key={opp.id} opportunity={opp} />
                     ))}
                 </div>
             ) : (

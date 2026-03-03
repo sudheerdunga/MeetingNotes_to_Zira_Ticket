@@ -1,0 +1,9 @@
+
+# Ignore the heavy AI worker directory
+worker/
+# Ignore build artifacts
+dist/
+# Ignore system/temp files
+.agent/
+.next/
+node_modules/
