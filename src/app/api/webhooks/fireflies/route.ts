@@ -37,19 +37,9 @@ export async function POST(req: Request) {
         const supabase = createServiceClient();
 
         // User Association Strategy:
-        // 1. If organizer_email is provided, try to find matching user
-        // 2. For now, we'll use a system user as fallback
-        let userId: string | null = null;
-
-        if (organizer_email) {
-            console.warn(`⚠️ User lookup not yet implemented. Using system user.`);
-        }
-
-        // Use system user for webhook imports
-        if (!userId) {
-            console.log('⚠️ Using system user for Fireflies import');
-            userId = 'system-fireflies-import';
-        }
+        // Use organizer_email from the payload as the user_id identifier.
+        // Fall back to 'system-fireflies-import' only if it's missing.
+        let userId: string = organizer_email || 'system-fireflies-import';
 
         console.log(`💾 Inserting meeting into database for user: ${userId}`);
 

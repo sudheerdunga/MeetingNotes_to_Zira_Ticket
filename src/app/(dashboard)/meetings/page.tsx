@@ -22,8 +22,8 @@ export default async function MeetingsPage() {
         .select("*")
         .order("created_at", { ascending: false });
 
-    if (session?.user?.id && !session.user.email?.includes('test')) {
-        query = query.or(`user_id.eq.${session.user.id},user_id.eq.system-fireflies-import`);
+    if (session?.user?.email && !session.user.email.includes('test')) {
+        query = query.eq('user_id', session.user.email);
     }
 
     const { data: meetings, error } = await query;

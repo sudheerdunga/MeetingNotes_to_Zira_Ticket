@@ -22,7 +22,7 @@ const insightSchema = z.object({
 
 export async function createMeeting(formData: FormData) {
     const session = await auth()
-    if (!session?.user?.id) {
+    if (!session?.user?.email) {
         throw new Error('User not authenticated')
     }
 
@@ -42,7 +42,7 @@ export async function createMeeting(formData: FormData) {
 
     const supabase = await createClient()
     const { data: meeting, error } = await supabase.from('meetings').insert({
-        user_id: session.user.id,
+        user_id: session.user.email,
         ...validatedFields.data,
     }).select().single()
 

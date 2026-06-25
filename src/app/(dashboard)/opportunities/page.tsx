@@ -16,8 +16,8 @@ export default async function OpportunitiesPage() {
         `)
         .eq('status', 'active');
 
-    if (session?.user?.id && !session.user.email?.includes('test')) {
-        query = query.eq('user_id', session.user.id);
+    if (session?.user?.email && !session.user.email.includes('test')) {
+        query = query.eq('user_id', session.user.email);
     }
 
     const { data: opportunities, error } = await query.order("created_at", { ascending: false });

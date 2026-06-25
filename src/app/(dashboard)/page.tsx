@@ -47,10 +47,10 @@ export default async function Dashboard() {
     .limit(2);
 
   // Filter if not a test user
-  if (!session.user?.email?.includes('test')) {
-    insightsQuery = insightsQuery.or(`user_id.eq.${session.user?.id},user_id.eq.system-fireflies-import`, { foreignTable: 'meetings' });
-    meetingsQuery = meetingsQuery.or(`user_id.eq.${session.user?.id},user_id.eq.system-fireflies-import`);
-    opportunitiesQuery = opportunitiesQuery.eq('user_id', session.user?.id);
+  if (session.user?.email && !session.user.email.includes('test')) {
+    insightsQuery = insightsQuery.eq('user_id', session.user.email, { foreignTable: 'meetings' });
+    meetingsQuery = meetingsQuery.eq('user_id', session.user.email);
+    opportunitiesQuery = opportunitiesQuery.eq('user_id', session.user.email);
   }
 
   const [{ data: insights }, { data: meetings }, { data: opportunities }] = await Promise.all([

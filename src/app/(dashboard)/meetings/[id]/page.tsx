@@ -20,11 +20,10 @@ export default async function MeetingDetailsPage({ params }: { params: Promise<{
     // In testing mode (no session), we allow viewing. 
     // If session exists, we check if it's the owner or a test user.
     const isTestUser = session?.user?.email?.includes('test');
-    const isOwner = meeting?.user_id === session?.user?.id;
-    const isSystemImport = meeting?.user_id === 'system-fireflies-import';
+    const isOwner = session?.user?.email && meeting?.user_id === session.user.email;
     const isTestingMode = !session?.user; // Assume testing mode if no session since we disabled middleware protection
 
-    if (meetingError || !meeting || (!isOwner && !isTestUser && !isTestingMode && !isSystemImport)) {
+    if (meetingError || !meeting || (!isOwner && !isTestUser && !isTestingMode)) {
         notFound();
     }
 
