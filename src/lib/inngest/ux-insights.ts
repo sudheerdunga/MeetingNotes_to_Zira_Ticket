@@ -19,7 +19,16 @@ export const processUxInsights = inngest.createFunction(
         }
 
         const analysisText = await step.run("analyze-transcript-with-claude", async () => {
-            const systemPrompt = `Analyze UX insights from this transcript. Return JSON with friction_points and feature_requests.`;
+            const systemPrompt = `Analyze UX insights from this transcript. Return ONLY valid JSON matching this exact structure:
+{
+  "friction_points": [
+    { "topic": "Short summary", "quote": "User exact words", "severity": "low|medium|high" }
+  ],
+  "feature_requests": [
+    { "feature": "Feature name", "context": "Why they need it", "urgency": "low|medium|high" }
+  ]
+}
+Do not include any text outside the JSON.`;
             const result = await generateText({
                 model: anthropic("claude-haiku-4-5"),
                 system: systemPrompt,
@@ -42,7 +51,7 @@ export const processUxInsights = inngest.createFunction(
                 for (const fp of analysis.friction_points) {
                     insightsToInsert.push({
                         meeting_id: meetingId,
-                        issue: `[Friction] ${fp.topic}: "${fp.quote}"`,
+                        issue: `[Friction] ${fp.topic || 'General'}: "${fp.quote || 'No quote'}"`,
                         severity: (fp.severity || 'low').toLowerCase(),
                         status: 'open',
                     });
@@ -53,7 +62,7 @@ export const processUxInsights = inngest.createFunction(
                 for (const fr of analysis.feature_requests) {
                     insightsToInsert.push({
                         meeting_id: meetingId,
-                        issue: `[Feature Request] ${fr.feature}: ${fr.context}`,
+                        issue: `[Feature Request] ${fr.feature || 'Unknown'}: ${fr.context || 'No context'}`,
                         severity: (fr.urgency || 'low').toLowerCase(),
                         status: 'open',
                     });
