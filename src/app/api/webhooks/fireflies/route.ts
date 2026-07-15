@@ -39,7 +39,7 @@ export async function POST(req: Request) {
         // User Association Strategy:
         // Use organizer_email from the payload as the user_id identifier.
         // Fall back to 'system-fireflies-import' only if it's missing.
-        let userId: string = organizer_email || 'system-fireflies-import';
+        const userId: string = organizer_email || 'system-fireflies-import';
 
         console.log(`💾 Inserting meeting into database for user: ${userId}`);
 

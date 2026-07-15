@@ -3,6 +3,9 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
 import { NotificationListener } from "@/components/NotificationListener";
 import "./globals.css";
+import ClarityProvider from "@/components/ClarityProvider";
+
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,6 +32,9 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         {children}
         <NotificationListener />
+        <ClarityProvider>
+          {children}
+        </ClarityProvider>
       </body>
       <Script
         src="https://www.googletagmanager.com/gtag/js?id=G-L0MQG65CFH"

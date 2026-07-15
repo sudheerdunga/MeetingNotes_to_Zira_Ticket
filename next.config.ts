@@ -16,6 +16,12 @@ const nextConfig: NextConfig = {
     };
     return config;
   },
+  turbo: {
+    resolveAlias: {
+      sharp: 'false',
+      'onnxruntime-node': 'false',
+    },
+  },
 };
 
 export default nextConfig;

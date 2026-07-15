@@ -1,8 +1,9 @@
 
-import { inngest } from "../src/lib/inngest/client";
+import { inngest } from "../../src/lib/inngest/client";
 import { createAnthropic } from "@ai-sdk/anthropic";
 import { generateText } from "ai";
-import { createServiceClient } from "../src/lib/supabase/service";
+import { createServiceClient } from "../../src/lib/supabase/service";
+import { Insight } from "../../src/types";
 
 const anthropic = createAnthropic({
     apiKey: process.env.ANTHROPIC_API_KEY,
@@ -22,15 +23,15 @@ export const clusterInsight = inngest.createFunction(
                 match_count: 5,
                 p_user_id: userId
             });
-            return (data || []).filter((i: any) => i.id !== insightId);
+            return (data || []).filter((i: Insight) => i.id !== insightId);
         });
 
         if (similarInsights.length === 0) return { status: "no matches" };
 
         const decision = await step.run("ai-cluster", async () => {
             const result = await generateText({
-                model: anthropic("claude-3-7-sonnet-20250219"),
-                prompt: `Determine if these insights share a root cause: ${issue} vs ${similarInsights.map((i: any) => i.issue).join(', ')}`,
+                model: anthropic("claude-haiku-4-5"),
+                prompt: `Determine if these insights share a root cause: ${issue} vs ${similarInsights.map((i: Insight) => i.issue).join(', ')}`,
             });
             const jsonMatch = result.text.match(/\{[\s\S]*\}/);
             return jsonMatch ? JSON.parse(jsonMatch[0]) : { shared: false };
@@ -42,7 +43,7 @@ export const clusterInsight = inngest.createFunction(
             const { data: existing } = await supabase
                 .from('insights')
                 .select('opportunity_id')
-                .in('id', similarInsights.map((i: any) => i.id))
+                .in('id', similarInsights.map((i: Insight) => i.id))
                 .not('opportunity_id', 'is', null)
                 .limit(1);
 
@@ -58,9 +59,10 @@ export const clusterInsight = inngest.createFunction(
                 oppId = newOpp.id;
             }
 
-            await supabase.from('insights').update({ opportunity_id: oppId }).in('id', [insightId, ...similarInsights.map((i: any) => i.id)]);
+            await supabase.from('insights').update({ opportunity_id: oppId }).in('id', [insightId, ...similarInsights.map((i: Insight) => i.id)]);
         });
 
         return { status: "clustered" };
     }
 );
+

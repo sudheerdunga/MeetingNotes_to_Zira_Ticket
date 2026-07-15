@@ -21,7 +21,7 @@ export const processUxInsights = inngest.createFunction(
         const analysisText = await step.run("analyze-transcript-with-claude", async () => {
             const systemPrompt = `Analyze UX insights from this transcript. Return JSON with friction_points and feature_requests.`;
             const result = await generateText({
-                model: anthropic("claude-3-7-sonnet-20250219"),
+                model: anthropic("claude-haiku-4-5"),
                 system: systemPrompt,
                 prompt: `Transcript:\n\n${transcript}`,
             });

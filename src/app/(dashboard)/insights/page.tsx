@@ -21,7 +21,7 @@ export default async function InsightsPage() {
     // If we have a session and it's not a test user, filter by their user_id
     // But also show system-imported insights
     if (session?.user?.email && !session.user.email.includes('test')) {
-        query = query.eq('user_id', session.user.email, { foreignTable: 'meetings' });
+        query = query.eq('meetings.user_id', session.user.email);
     }
 
     const { data: insights, error } = await query.order("created_at", { ascending: false });

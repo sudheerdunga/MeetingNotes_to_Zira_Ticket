@@ -1,6 +1,7 @@
 
-import { inngest } from "../src/lib/inngest/client";
-import { createServiceClient } from "../src/lib/supabase/service";
+import { inngest } from "../../src/lib/inngest/client";
+import { createServiceClient } from "../../src/lib/supabase/service";
+
 
 export const generateInsightEmbedding = inngest.createFunction(
     { id: "generate-insight-embedding" },
@@ -24,6 +25,10 @@ export const generateInsightEmbedding = inngest.createFunction(
             const { data } = await supabase.from('meetings').select('user_id').eq('id', meetingId).single();
             return data;
         });
+
+        if (!meetingData) {
+            throw new Error(`Meeting not found: ${meetingId}`);
+        }
 
         await inngest.send({
             name: "insights.cluster",

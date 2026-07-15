@@ -5,6 +5,8 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { InsightCard } from "@/components/InsightCard";
 import { OpportunityCard } from "@/components/OpportunityCard";
+import { Opportunity, Meeting } from "@/types";
+
 
 export default async function Dashboard() {
   const session = await auth();
@@ -48,7 +50,7 @@ export default async function Dashboard() {
 
   // Filter if not a test user
   if (session.user?.email && !session.user.email.includes('test')) {
-    insightsQuery = insightsQuery.eq('user_id', session.user.email, { foreignTable: 'meetings' });
+    insightsQuery = insightsQuery.eq('meetings.user_id', session.user.email);
     meetingsQuery = meetingsQuery.eq('user_id', session.user.email);
     opportunitiesQuery = opportunitiesQuery.eq('user_id', session.user.email);
   }
@@ -87,7 +89,7 @@ export default async function Dashboard() {
         <div className="grid">
           {opportunities && opportunities.length > 0 ? (
             opportunities.map((opp) => (
-              <OpportunityCard key={opp.id} opportunity={opp as any} />
+              <OpportunityCard key={opp.id} opportunity={opp as unknown as Opportunity} />
             ))
           ) : (
             <div className="card" style={{ gridColumn: "1 / -1", textAlign: "center", padding: "40px 20px", border: '1px dashed var(--border)', background: 'transparent' }}>
@@ -105,8 +107,8 @@ export default async function Dashboard() {
 
         <div className="grid">
           {insights && insights.length > 0 ? (
-            insights.map((insight: any) => (
-              <InsightCard key={insight.id} initialInsight={insight as any} />
+            insights.map((insight) => (
+              <InsightCard key={insight.id} initialInsight={insight as unknown as Parameters<typeof InsightCard>[0]['initialInsight']} />
             ))
           ) : (
             <div className="card" style={{ gridColumn: "1 / -1", textAlign: "center", padding: "40px 20px" }}>
@@ -128,7 +130,7 @@ export default async function Dashboard() {
 
         <div className="grid">
           {meetings && meetings.length > 0 ? (
-            meetings.map((meeting: any) => (
+            meetings.map((meeting: Meeting) => (
               <Link href={`/meetings/${meeting.id}`} key={meeting.id} style={{ textDecoration: 'none', color: 'inherit' }}>
                 <div className="card">
                   <div className="card-header">

@@ -5,6 +5,8 @@ import { auth } from "@/auth";
 import { createClient } from "@/lib/supabase/server";
 import { doc, p, strong, text, a, blockQuote } from "@atlaskit/adf-utils/builders";
 import { revalidatePath } from "next/cache";
+import { Insight, Meeting } from "@/types";
+
 
 async function getJiraContext(accessToken: string) {
     // 1. Get Accessible Resources (Cloud ID)
@@ -71,7 +73,8 @@ export async function pushToJira(insightId: string) {
             return { success: false, error: "Insight not found in database." };
         }
 
-        const meeting = (insight as any).meetings;
+        const insightWithMeeting = insight as unknown as Insight & { meetings: Meeting };
+        const meeting = insightWithMeeting.meetings;
         const accessToken = session.jiraAccessToken;
 
         const { cloudId, projectKey } = await getJiraContext(accessToken);

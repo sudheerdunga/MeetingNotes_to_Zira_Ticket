@@ -54,7 +54,7 @@ export interface FirefliesTranscript {
   transcript_url: string;
 }
 
-export async function fetchFireflies(query: string, variables: any = {}) {
+export async function fetchFireflies(query: string, variables: Record<string, unknown> = {}) {
   const token = process.env.FIREFLIES_API_KEY;
   if (!token) {
     throw new Error('FIREFLIES_API_KEY is not set in environment variables');
@@ -82,7 +82,7 @@ export async function fetchFireflies(query: string, variables: any = {}) {
 }
 
 export async function getLatestTranscript(email?: string): Promise<FirefliesTranscript | null> {
-  const variables: any = { limit: 1 };
+  const variables: Record<string, unknown> = { limit: 1 };
   if (email) {
     variables.organizers = [email];
   }
