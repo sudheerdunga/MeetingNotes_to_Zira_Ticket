@@ -30,11 +30,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        {children}
-        <NotificationListener />
         <ClarityProvider>
           {children}
+          <NotificationListener />
         </ClarityProvider>
+
+
+
       </body>
       <Script
         src="https://www.googletagmanager.com/gtag/js?id=G-L0MQG65CFH"
