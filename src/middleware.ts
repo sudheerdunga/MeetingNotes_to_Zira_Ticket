@@ -7,7 +7,10 @@ export default auth((req) => {
   const isPublicRoute =
     req.nextUrl.pathname === "/" ||
     req.nextUrl.pathname === "/landing" ||
-    req.nextUrl.pathname === "/login"
+    req.nextUrl.pathname === "/login" ||
+    req.nextUrl.pathname === "/terms" ||
+    req.nextUrl.pathname === "/privacy" ||
+    req.nextUrl.pathname === "/rework"
 
   if (
     isPublicRoute ||

@@ -18,8 +18,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "KodaSync",
-  description: "Meeting insights and tracking",
+  title: "KodaSync - Turn customer conversations into Jira tickets with AI",
+  description: "Stop rewatching user interviews. KodaSync automatically extracts high-signal friction points from Fireflies or Fathom calls and turns them into ready-to-code Jira tickets—complete with user stories, acceptance criteria, and timestamped links to the evidence.",
 };
 
 export default function RootLayout({
@@ -54,4 +54,3 @@ export default function RootLayout({
     </html>
   );
 }
-
