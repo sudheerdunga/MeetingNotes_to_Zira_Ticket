@@ -1,21 +1,23 @@
-
 "use client";
 
 import React, { useState } from 'react';
 import Link from 'next/link';
 import {
-    Video,
-    Zap,
-    CheckCircle2,
-    BarChart3,
-    Link as LinkIcon,
-    RefreshCcw,
-    Sparkles,
-    Search,
-    Users
-} from 'lucide-react';
-import './landing.css';
+    VideoCameraIcon as Video,
+    BoltIcon as Zap,
+    ChartBarIcon as BarChart3,
+    LinkIcon,
+    ArrowPathIcon as RefreshCcw,
+    SparklesIcon as Sparkles,
+    MagnifyingGlassIcon as Search,
+    UsersIcon as Users
+} from '@heroicons/react/24/outline';
+import { CheckCircleIcon as CheckCircle2 } from '@heroicons/react/24/solid';
 import { joinWaitlist } from '@/app/actions';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
 
 export default function LandingPage() {
     const [email, setEmail] = useState('');
@@ -48,182 +50,210 @@ export default function LandingPage() {
     };
 
     return (
-        <div className="lp-body">
+        <div className="min-h-screen bg-white text-black font-sans overflow-x-hidden selection:bg-black selection:text-white">
             {/* Navigation */}
-            <nav className="lp-nav lp-container">
-                <Link href="/" className="lp-logo">KodaSync</Link>
-                <div className="lp-nav-actions">
-                    <Link href="/login" className="lp-btn-ghost">Login</Link>
-                    <button onClick={() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })} className="lp-btn-primary">
+            <nav className="absolute top-0 left-0 right-0 z-50 flex justify-between items-center px-6 py-6 max-w-7xl mx-auto w-full">
+                <Link href="/" className="flex items-center gap-2">
+                    <img src="/KodaSync_Logo_1.png?v=3" alt="KodaSync Logo" className="h-auto w-30" />
+                </Link>
+                <div className="flex gap-4 items-center">
+                    <Link href="/login">
+                        <Button variant="ghost">Login</Button>
+                    </Link>
+                    <Button onClick={() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })}>
                         Join Waitlist
-                    </button>
+                    </Button>
                 </div>
             </nav>
 
             {/* Hero Section */}
-            <header className="lp-hero lp-container">
-                <span className="lp-badge">Free for Early Beta Adaptors</span>
-                <h1 className="lp-hero-headline">
+            <header className="pt-40 pb-20 px-6 max-w-7xl mx-auto text-center flex flex-col items-center animate-in fade-in slide-in-from-bottom-4 duration-700">
+                <Badge variant="secondary" className="mb-8 py-1.5 px-4 text-sm font-medium">Free for Early Beta Adaptors</Badge>
+                <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-8 leading-tight">
                     Stop Rewatching User Interviews. <br />
-                    <span style={{ color: 'var(--lp-primary)' }}>Start Fixing What’s Broken.</span>
+                    <span className="text-black/70">Start Fixing What’s Broken.</span>
                 </h1>
-                <p className="lp-hero-subheadline">
+                <p className="text-lg md:text-xl text-gray-500 max-w-2xl mb-12">
                     KodaSync automatically extracts high-signal friction points from your Fireflies or Fathom calls and turns them into ready-to-code Jira tickets.
                 </p>
-                <div className="lp-hero-cta-group">
-                    <button
+                <div className="flex flex-col items-center gap-4">
+                    <Button
+                        size="lg"
+                        className="text-lg px-8 h-14"
                         onClick={() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })}
-                        className="lp-btn-primary"
-                        style={{ fontSize: '1.1rem', padding: '16px 32px' }}
                     >
                         Get Early Access — Free for Beta
-                    </button>
-                    <div className="lp-social-proof">
+                    </Button>
+                    <div className="text-sm text-gray-400 font-medium">
                         &quot;Integrates with Fireflies, Fathom, and Jira in 60 seconds.&quot;
                     </div>
                 </div>
             </header>
 
             {/* Problem Section */}
-            <section className="lp-section lp-container animate-fade-in">
-                <div className="lp-section-header">
-                    <span className="lp-badge" style={{ background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', borderColor: 'rgba(239, 68, 68, 0.2)' }}>The Pain</span>
-                    <h2 style={{ fontSize: '2.5rem', fontWeight: 800 }}>The &quot;Product Manager&apos;s Paradox&quot;</h2>
+            <section className="py-24 px-6 max-w-7xl mx-auto border-t border-gray-100">
+                <div className="text-center mb-16">
+                    <Badge variant="outline" className="mb-4 text-red-600 bg-red-50 border-red-200">The Pain</Badge>
+                    <h2 className="text-4xl font-bold tracking-tight">The &quot;Product Manager&apos;s Paradox&quot;</h2>
                 </div>
 
-                <div className="lp-problem-grid">
-                    <div className="lp-problem-card">
-                        <Video className="lp-primary" style={{ marginBottom: '16px' }} />
-                        <h4>100+ Hours of Recordings</h4>
-                        <p>You have dozens of weekly customer calls sitting idle in your cloud, gathering dust.</p>
-                    </div>
-                    <div className="lp-problem-card">
-                        <Search className="lp-primary" style={{ marginBottom: '16px' }} />
-                        <h4>Hidden &quot;Aha!&quot; Moments</h4>
-                        <p>Critical feedback is buried somewhere in those transcripts, but you don&apos;t have time to find them.</p>
-                    </div>
-                    <div className="lp-problem-card">
-                        <Zap className="lp-primary" style={{ marginBottom: '16px' }} />
-                        <h4>Roadmap Guestimation</h4>
-                        <p>Critical bugs stay in the transcript while your roadmap priorities remain a guess.</p>
-                    </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <Card className="bg-gray-50/50 border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+                        <CardHeader>
+                            <Video className="w-8 h-8 text-black mb-4" />
+                            <CardTitle>100+ Hours of Recordings</CardTitle>
+                        </CardHeader>
+                        <CardContent className="text-gray-500">
+                            You have dozens of weekly customer calls sitting idle in your cloud, gathering dust.
+                        </CardContent>
+                    </Card>
+                    <Card className="bg-gray-50/50 border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+                        <CardHeader>
+                            <Search className="w-8 h-8 text-black mb-4" />
+                            <CardTitle>Hidden &quot;Aha!&quot; Moments</CardTitle>
+                        </CardHeader>
+                        <CardContent className="text-gray-500">
+                            Critical feedback is buried somewhere in those transcripts, but you don&apos;t have time to find them.
+                        </CardContent>
+                    </Card>
+                    <Card className="bg-gray-50/50 border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+                        <CardHeader>
+                            <Zap className="w-8 h-8 text-black mb-4" />
+                            <CardTitle>Roadmap Guestimation</CardTitle>
+                        </CardHeader>
+                        <CardContent className="text-gray-500">
+                            Critical bugs stay in the transcript while your roadmap priorities remain a guess.
+                        </CardContent>
+                    </Card>
                 </div>
             </section>
 
             {/* Solution Section (Magic) */}
-            <section className="lp-section lp-container animate-fade-in">
-                <div className="lp-section-header">
-                    <span className="lp-badge">The Magic</span>
-                    <h2 style={{ fontSize: '2.5rem', fontWeight: 800 }}>From Conversation to Resolution</h2>
+            <section className="py-24 px-6 max-w-7xl mx-auto border-t border-gray-100">
+                <div className="text-center mb-20">
+                    <Badge variant="outline" className="mb-4">The Magic</Badge>
+                    <h2 className="text-4xl font-bold tracking-tight">From Conversation to Resolution</h2>
                 </div>
 
-                <div className="lp-steps">
-                    <div className="lp-step-row">
-                        <div className="lp-step-content">
-                            <span className="lp-step-number">Step 01</span>
-                            <h3 className="lp-step-headline">Auto-Ingest.</h3>
-                            <p className="lp-step-body">
+                <div className="space-y-24 max-w-5xl mx-auto">
+                    <div className="flex flex-col md:flex-row gap-12 items-center">
+                        <div className="flex-1 space-y-4">
+                            <span className="text-sm font-bold text-gray-400 uppercase tracking-wider">Step 01</span>
+                            <h3 className="text-3xl font-bold tracking-tight">Auto-Ingest.</h3>
+                            <p className="text-lg text-gray-500">
                                 We sync directly with your existing meeting assistant. No new bot to invite, no extra clicks required. We listen where you already work.
                             </p>
                         </div>
-                        <div className="lp-step-visual">
-                            <RefreshCcw size={80} style={{ color: 'var(--lp-primary)', opacity: 0.8 }} />
+                        <div className="flex-1 flex justify-center bg-gray-50 p-12 rounded-3xl border border-gray-100">
+                            <RefreshCcw className="w-32 h-32 text-black/80" />
                         </div>
                     </div>
 
-                    <div className="lp-step-row">
-                        <div className="lp-step-content">
-                            <span className="lp-step-number">Step 02</span>
-                            <h3 className="lp-step-headline">Evidence-Based Insights.</h3>
-                            <p className="lp-step-body">
+                    <div className="flex flex-col md:flex-row-reverse gap-12 items-center">
+                        <div className="flex-1 space-y-4">
+                            <span className="text-sm font-bold text-gray-400 uppercase tracking-wider">Step 02</span>
+                            <h3 className="text-3xl font-bold tracking-tight">Evidence-Based Insights.</h3>
+                            <p className="text-lg text-gray-500">
                                 Our AI doesn&apos;t just summarize; it finds the exact moment a user struggled and maps the friction with precision timestamps.
                             </p>
                         </div>
-                        <div className="lp-step-visual">
-                            <Sparkles size={80} style={{ color: 'var(--lp-accent)', opacity: 0.8 }} />
+                        <div className="flex-1 flex justify-center bg-gray-50 p-12 rounded-3xl border border-gray-100">
+                            <Sparkles className="w-32 h-32 text-black/80" />
                         </div>
                     </div>
 
-                    <div className="lp-step-row">
-                        <div className="lp-step-content">
-                            <span className="lp-step-number">Step 03</span>
-                            <h3 className="lp-step-headline">One-Click Engineering.</h3>
-                            <p className="lp-step-body">
+                    <div className="flex flex-col md:flex-row gap-12 items-center">
+                        <div className="flex-1 space-y-4">
+                            <span className="text-sm font-bold text-gray-400 uppercase tracking-wider">Step 03</span>
+                            <h3 className="text-3xl font-bold tracking-tight">One-Click Engineering.</h3>
+                            <p className="text-lg text-gray-500">
                                 Push a fully formatted ticket to Jira, complete with the user story, acceptance criteria, and the direct evidence link.
                             </p>
                         </div>
-                        <div className="lp-step-visual">
-                            <Zap size={80} style={{ color: '#fbbf24', opacity: 0.8 }} />
+                        <div className="flex-1 flex justify-center bg-gray-50 p-12 rounded-3xl border border-gray-100">
+                            <Zap className="w-32 h-32 text-black/80" />
                         </div>
                     </div>
                 </div>
             </section>
 
             {/* Features Detail */}
-            <section className="lp-section lp-container animate-fade-in">
-                <div className="lp-section-header">
-                    <span className="lp-badge">Deep Dive</span>
-                    <h2 style={{ fontSize: '2.5rem', fontWeight: 800 }}>Built for High-Growth Product Teams</h2>
+            <section className="py-24 px-6 max-w-7xl mx-auto border-t border-gray-100">
+                <div className="text-center mb-16">
+                    <Badge variant="outline" className="mb-4">Deep Dive</Badge>
+                    <h2 className="text-4xl font-bold tracking-tight">Built for High-Growth Product Teams</h2>
                 </div>
 
-                <div className="lp-feature-grid">
-                    <div className="lp-feature-card">
-                        <div className="lp-feature-icon"><BarChart3 size={24} /></div>
-                        <h3>Sentiment Heatmaps</h3>
-                        <p style={{ color: '#a1a1aa', marginTop: '12px' }}>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <Card className="border-gray-200">
+                        <CardHeader>
+                            <div className="w-12 h-12 rounded-lg bg-black text-white flex items-center justify-center mb-4">
+                                <BarChart3 size={24} />
+                            </div>
+                            <CardTitle>Sentiment Heatmaps</CardTitle>
+                        </CardHeader>
+                        <CardContent className="text-gray-500">
                             See which parts of your onboarding flow or feature set are making users angry vs delighting them.
-                        </p>
-                    </div>
-                    <div className="lp-feature-card">
-                        <div className="lp-feature-icon"><LinkIcon size={24} /></div>
-                        <h3>The &quot;Receipts&quot; Link</h3>
-                        <p style={{ color: '#a1a1aa', marginTop: '12px' }}>
+                        </CardContent>
+                    </Card>
+                    <Card className="border-gray-200">
+                        <CardHeader>
+                            <div className="w-12 h-12 rounded-lg bg-black text-white flex items-center justify-center mb-4">
+                                <LinkIcon size={24} />
+                            </div>
+                            <CardTitle>The &quot;Receipts&quot; Link</CardTitle>
+                        </CardHeader>
+                        <CardContent className="text-gray-500">
                             Every Jira ticket includes a direct timestamp link. No more &quot;I can&apos;t reproduce this&quot; from developers.
-                        </p>
-                    </div>
-                    <div className="lp-feature-card">
-                        <div className="lp-feature-icon"><Users size={24} /></div>
-                        <h3>Bi-Directional Sync</h3>
-                        <p style={{ color: '#a1a1aa', marginTop: '12px' }}>
+                        </CardContent>
+                    </Card>
+                    <Card className="border-gray-200">
+                        <CardHeader>
+                            <div className="w-12 h-12 rounded-lg bg-black text-white flex items-center justify-center mb-4">
+                                <Users size={24} />
+                            </div>
+                            <CardTitle>Bi-Directional Sync</CardTitle>
+                        </CardHeader>
+                        <CardContent className="text-gray-500">
                             When the ticket hits &quot;Done&quot; in Jira, we notify you so you can close the loop with the customer instantly.
-                        </p>
-                    </div>
+                        </CardContent>
+                    </Card>
                 </div>
             </section>
 
             {/* Beta Closer */}
-            <section className="lp-beta-footer lp-container animate-fade-in">
-                <h2 style={{ fontSize: '3rem', fontWeight: 800, marginBottom: '24px' }}>
+            <section className="py-32 px-6 max-w-7xl mx-auto text-center border-t border-gray-100">
+                <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-8">
                     Help us build the future of <br />Product Discovery.
                 </h2>
-                <p style={{ fontSize: '1.25rem', color: '#a1a1aa', maxWidth: '800px', margin: '0 auto' }}>
-                    &quot;We are looking for <strong>5 Product Managers</strong> to join our founding beta. You&apos;ll get free access for life and direct influence over our feature roadmap.&quot;
+                <p className="text-xl text-gray-500 max-w-3xl mx-auto mb-12">
+                    &quot;We are looking for <strong className="text-black">5 Product Managers</strong> to join our founding beta. You&apos;ll get free access for life and direct influence over our feature roadmap.&quot;
                 </p>
 
                 {!submitted ? (
-                    <form className="lp-waitlist-form" onSubmit={handleSubmit}>
-                        <input
+                    <form className="max-w-md mx-auto flex flex-col sm:flex-row gap-3" onSubmit={handleSubmit}>
+                        <Input
                             type="email"
                             placeholder="Enter your work email"
-                            className="lp-input"
+                            className="h-12 text-base"
                             required
                             disabled={loading}
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                         />
-                        <button type="submit" className="lp-btn-primary" disabled={loading}>
+                        <Button type="submit" size="lg" className="h-12 w-full sm:w-auto shrink-0" disabled={loading}>
                             {loading ? 'Joining...' : 'Join the Beta Waitlist'}
-                        </button>
+                        </Button>
                     </form>
                 ) : (
-                    <div style={{ marginTop: '40px', padding: '24px', borderRadius: '24px', background: 'rgba(59, 130, 246, 0.1)', color: 'var(--lp-primary)', fontWeight: 600 }}>
-                        <CheckCircle2 size={32} style={{ margin: '0 auto 12px' }} />
+                    <div className="max-w-md mx-auto p-8 rounded-2xl bg-gray-50 border border-gray-100 text-black font-semibold flex flex-col items-center">
+                        <CheckCircle2 size={40} className="mb-4 text-green-600" />
                         {feedback}
                     </div>
                 )}
             </section>
 
-            <footer className="lp-container" style={{ padding: '40px 0', borderTop: '1px solid var(--lp-border)', textAlign: 'center', opacity: 0.5, fontSize: '0.9rem' }}>
+            <footer className="py-10 border-t border-gray-100 text-center text-gray-400 text-sm">
                 &copy; 2026 KodaSync. All rights reserved. Built for modern product teams.
             </footer>
         </div>

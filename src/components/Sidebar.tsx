@@ -2,7 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Video, Lightbulb, LogOut, FolderKanban } from "lucide-react";
+import {
+    Squares2X2Icon as LayoutDashboard,
+    VideoCameraIcon as Video,
+    LightBulbIcon as Lightbulb,
+    ArrowRightStartOnRectangleIcon as LogOut,
+    FolderIcon as FolderKanban
+} from "@heroicons/react/24/outline";
 import { Session } from "next-auth";
 import { signOut, signIn } from "next-auth/react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -14,6 +20,7 @@ import {
     DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
+    DropdownMenuGroup,
 } from "@/components/ui/dropdown-menu";
 
 const navItems = [
@@ -30,38 +37,30 @@ export function Sidebar({ session }: { session: Session }) {
 
     const initials = user?.name
         ? user.name
-              .split(" ")
-              .map((n) => n[0])
-              .join("")
-              .toUpperCase()
-              .slice(0, 2)
+            .split(" ")
+            .map((n) => n[0])
+            .join("")
+            .toUpperCase()
+            .slice(0, 2)
         : "U";
 
     return (
         <aside className="w-64 bg-sidebar border-r border-sidebar-border p-4 flex flex-col h-screen sticky top-0">
             <div className="flex items-center gap-2 px-2 py-4 mb-4">
-                <div className="h-8 w-8 rounded-lg bg-linear-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-md">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 4V20M4 12H20" stroke="white" strokeWidth="2.5" strokeLinecap="round" />
-                    </svg>
-                </div>
-                <h1 className="text-xl font-bold tracking-tight bg-linear-to-r from-indigo-500 to-purple-600 bg-clip-text text-transparent">
-                    KodaSync
-                </h1>
+                <img src="/KodaSync_Logo_1.png?v=3" alt="KodaSync" width={150} height={150} />
             </div>
 
-            <nav className="space-y-1 flex-1">
+            <nav className="space-y-1 flex-1" >
                 {navItems.map((item) => {
                     const isActive = pathname === item.href;
                     return (
                         <Link
                             key={item.href}
                             href={item.href}
-                            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                                isActive
-                                    ? "bg-sidebar-accent text-sidebar-accent-foreground shadow-sm"
-                                    : "text-sidebar-foreground/75 hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground"
-                            }`}
+                            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${isActive
+                                ? "bg-sidebar-accent text-sidebar-accent-foreground shadow-sm"
+                                : "text-sidebar-foreground/75 hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground"
+                                }`}
                         >
                             <item.icon className="h-4.5 w-4.5 shrink-0" />
                             <span>{item.name}</span>
@@ -90,12 +89,14 @@ export function Sidebar({ session }: { session: Session }) {
                             </div>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="w-56 mb-2">
-                            <DropdownMenuLabel className="font-normal">
-                                <div className="flex flex-col space-y-1">
-                                    <p className="text-sm font-medium leading-none">{user.name}</p>
-                                    <p className="text-xs leading-none text-muted-foreground">{user.email}</p>
-                                </div>
-                            </DropdownMenuLabel>
+                            <DropdownMenuGroup>
+                                <DropdownMenuLabel className="font-normal">
+                                    <div className="flex flex-col space-y-1">
+                                        <p className="text-sm font-medium leading-none">{user.name}</p>
+                                        <p className="text-xs leading-none text-muted-foreground">{user.email}</p>
+                                    </div>
+                                </DropdownMenuLabel>
+                            </DropdownMenuGroup>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem className="flex items-center justify-between py-2">
                                 <span className="text-sm">Jira Integration</span>
