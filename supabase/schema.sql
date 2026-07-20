@@ -131,4 +131,3 @@ begin
   LIMIT match_count;
 end;
 $$;
-

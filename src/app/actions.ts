@@ -128,6 +128,15 @@ export async function joinWaitlist(formData: FormData) {
         return { error: 'Failed to join waitlist. Please try again.' }
     }
 
+    // Trigger Inngest background job
+    const { inngest } = await import('@/lib/inngest/client')
+    await inngest.send({
+        name: 'user/waitlist.joined',
+        data: {
+            email: validatedFields.data.email,
+        },
+    })
+
     return { success: true }
 }
 
