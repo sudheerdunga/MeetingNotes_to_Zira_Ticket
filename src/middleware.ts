@@ -5,7 +5,6 @@ export default auth((req) => {
   const isLoggedIn = !!req.auth
   // Allow access to public pages, auth routes, webhooks, and Inngest
   const isPublicRoute =
-    req.nextUrl.pathname === "/" ||
     req.nextUrl.pathname === "/landing" ||
     req.nextUrl.pathname === "/login" ||
     req.nextUrl.pathname === "/terms" ||
@@ -25,6 +24,19 @@ export default auth((req) => {
   if (!isLoggedIn) {
     const loginUrl = new URL("/login", req.url)
     return NextResponse.redirect(loginUrl)
+  }
+
+  // Check onboarding status
+  const isOnboardingRoute = req.nextUrl.pathname.startsWith("/onboarding")
+  const hasOnboarded = req.cookies.get("has_onboarded")?.value === "true"
+
+  if (isLoggedIn && !hasOnboarded && !isOnboardingRoute) {
+    const onboardingUrl = new URL("/onboarding", req.url)
+    return NextResponse.redirect(onboardingUrl)
+  }
+
+  if (isLoggedIn && hasOnboarded && isOnboardingRoute) {
+    return NextResponse.redirect(new URL("/", req.url))
   }
 
   // Allow authenticated users to access all other routes

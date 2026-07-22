@@ -4,7 +4,7 @@ import Script from "next/script";
 import { NotificationListener } from "@/components/NotificationListener";
 import "./globals.css";
 import ClarityProvider from "@/components/ClarityProvider";
-
+import { Analytics } from "@vercel/analytics/next"
 
 
 const geistSans = Geist({
@@ -42,6 +42,7 @@ export default function RootLayout({
         src="https://www.googletagmanager.com/gtag/js?id=G-L0MQG65CFH"
         strategy="afterInteractive"
       />
+
       <Script id="google-analytics" strategy="afterInteractive">
         {`
           window.dataLayer = window.dataLayer || [];

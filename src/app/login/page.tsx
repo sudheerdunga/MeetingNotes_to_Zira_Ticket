@@ -12,27 +12,28 @@ export default async function LoginPage() {
     }
 
     return (
-        <div className="min-h-screen bg-white text-black font-sans flex flex-col items-center justify-center selection:bg-black selection:text-white p-4">
+        <div className="min-h-screen bg-background text-foreground font-sans flex flex-col items-center justify-center selection:bg-foreground selection:text-background p-4">
             <Link href="/" className="mb-8">
-                <img src="/KodaSync_Logo_1.png?v=3" alt="KodaSync Logo" className="h-auto w-48" />
+                <img src="/KodaSync_Logo_1.png?v=3" alt="KodaSync Logo" className="h-auto w-48 logo-light" />
+                <img src="/KodaSync_Logo_1_Dark.png" alt="KodaSync Logo" className="h-auto w-48 logo-dark" />
             </Link>
             
-            <Card className="w-full max-w-md border-gray-200 shadow-sm">
+            <Card className="w-full max-w-md shadow-sm">
                 <CardHeader className="text-center">
                     <CardTitle className="text-2xl font-semibold tracking-tight">
                         Welcome to KodaSync
                     </CardTitle>
-                    <CardDescription className="text-gray-500">
+                    <CardDescription className="text-muted-foreground">
                         Transform your meetings into actionable insights
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                     <div className="relative">
                         <div className="absolute inset-0 flex items-center">
-                            <span className="w-full border-t border-gray-200" />
+                            <span className="w-full border-t border-border" />
                         </div>
                         <div className="relative flex justify-center text-xs uppercase">
-                            <span className="bg-white px-2 text-gray-500 font-medium">
+                            <span className="bg-card px-2 text-muted-foreground font-medium">
                                 Sign in with
                             </span>
                         </div>
@@ -45,7 +46,7 @@ export default async function LoginPage() {
                                 await signIn("google", { redirectTo: "/" })
                             }}
                         >
-                            <Button variant="outline" type="submit" className="w-full h-11 flex items-center justify-center gap-2 border-gray-200 hover:bg-gray-50 text-black">
+                            <Button variant="outline" type="submit" className="w-full h-11 flex items-center justify-center gap-2 border-border hover:bg-accent text-foreground">
                                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                                     <path d="M19.6 10.227c0-.709-.064-1.39-.182-2.045H10v3.868h5.382a4.6 4.6 0 01-1.996 3.018v2.51h3.232c1.891-1.742 2.982-4.305 2.982-7.35z" fill="#4285F4" />
                                     <path d="M10 20c2.7 0 4.964-.895 6.618-2.423l-3.232-2.509c-.895.6-2.04.955-3.386.955-2.605 0-4.81-1.76-5.595-4.123H1.064v2.59A9.996 9.996 0 0010 20z" fill="#34A853" />
@@ -62,7 +63,7 @@ export default async function LoginPage() {
                                 await signIn("atlassian", { redirectTo: "/" })
                             }}
                         >
-                            <Button variant="outline" type="submit" className="w-full h-11 flex items-center justify-center gap-2 border-gray-200 hover:bg-gray-50 text-black">
+                            <Button variant="outline" type="submit" className="w-full h-11 flex items-center justify-center gap-2 border-border hover:bg-accent text-foreground">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                                     <path d="M11.53 2c0 2.4 1.97 4.35 4.35 4.35h1.78v1.7c0 2.4 1.95 4.34 4.34 4.34V2.84a.84.84 0 00-.84-.84h-9.63z" fill="#2684FF" />
                                     <path d="M6.77 6.77c0 2.4 1.95 4.35 4.35 4.35h1.78v1.7c0 2.4 1.95 4.34 4.34 4.34V7.61a.84.84 0 00-.84-.84H6.77z" fill="url(#jira-gradient)" />
@@ -84,8 +85,8 @@ export default async function LoginPage() {
                     </div>
                 </CardContent>
                 <CardFooter className="flex justify-center text-center pb-6">
-                    <p className="text-xs text-gray-500">
-                        By signing in, you agree to our <Link href="/terms" className="underline hover:text-black transition-colors">Terms of Service</Link> and <Link href="/privacy" className="underline hover:text-black transition-colors">Privacy Policy</Link>
+                    <p className="text-xs text-muted-foreground">
+                        By signing in, you agree to our <Link href="/terms" className="underline hover:text-foreground transition-colors">Terms of Service</Link> and <Link href="/privacy" className="underline hover:text-foreground transition-colors">Privacy Policy</Link>
                     </p>
                 </CardFooter>
             </Card>

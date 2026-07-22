@@ -47,7 +47,8 @@ export function Sidebar({ session }: { session: Session }) {
     return (
         <aside className="w-64 bg-sidebar border-r border-sidebar-border p-4 flex flex-col h-screen sticky top-0">
             <div className="flex items-center gap-2 px-2 py-4 mb-4">
-                <img src="/KodaSync_Logo_1.png?v=3" alt="KodaSync" width={150} height={150} />
+                <img src="/KodaSync_Logo_1.png?v=3" alt="KodaSync" width={150} height={150} className="logo-light" />
+                <img src="/KodaSync_Logo_1_Dark.png" alt="KodaSync" width={150} height={150} className="logo-dark" />
             </div>
 
             <nav className="space-y-1 flex-1" >
