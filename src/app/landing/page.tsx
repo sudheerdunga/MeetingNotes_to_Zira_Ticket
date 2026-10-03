@@ -306,7 +306,7 @@ export default function LandingPage() {
                     <Card className="border-gray-200 bg-white hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
                         <CardHeader>
                             <div className="w-12 h-12 rounded-lg bg-black text-white flex items-center justify-center mb-4">
-                                <BarChart3 size={24} />
+                                <BarChart3 className="w-6 h-6" />
                             </div>
                             <CardTitle>Sentiment Heatmaps</CardTitle>
                         </CardHeader>
@@ -317,7 +317,7 @@ export default function LandingPage() {
                     <Card className="border-gray-200 bg-white hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
                         <CardHeader>
                             <div className="w-12 h-12 rounded-lg bg-black text-white flex items-center justify-center mb-4">
-                                <LinkIcon size={24} />
+                                <LinkIcon className="w-6 h-6" />
                             </div>
                             <CardTitle>The &quot;Receipts&quot; Link</CardTitle>
                         </CardHeader>
@@ -328,7 +328,7 @@ export default function LandingPage() {
                     <Card className="border-gray-200 bg-white hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
                         <CardHeader>
                             <div className="w-12 h-12 rounded-lg bg-black text-white flex items-center justify-center mb-4">
-                                <Users size={24} />
+                                <Users className="w-6 h-6" />
                             </div>
                             <CardTitle>Bi-Directional Sync</CardTitle>
                         </CardHeader>
@@ -444,7 +444,7 @@ export default function LandingPage() {
                     </form>
                 ) : (
                     <div className="max-w-md mx-auto p-8 rounded-2xl bg-gray-50 border border-gray-100 text-black font-semibold flex flex-col items-center">
-                        <CheckCircle2 size={40} className="mb-4 text-green-600" />
+                        <CheckCircle2 className="w-10 h-10 mb-4 text-green-600" />
                         {feedback}
                     </div>
                 )}

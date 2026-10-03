@@ -20,8 +20,11 @@ export default auth((req) => {
     return NextResponse.next()
   }
 
-  // Redirect to login if not authenticated
+  // Redirect if not authenticated: landing page for root, login for protected routes
   if (!isLoggedIn) {
+    if (req.nextUrl.pathname === "/") {
+      return NextResponse.redirect(new URL("/landing", req.url))
+    }
     const loginUrl = new URL("/login", req.url)
     return NextResponse.redirect(loginUrl)
   }
