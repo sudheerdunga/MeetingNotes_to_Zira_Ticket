@@ -74,7 +74,10 @@ export default function PrivacyPolicyPage() {
                     <section className="space-y-4">
                         <h2 className="text-2xl font-semibold text-black">7. Contact Us</h2>
                         <p>
-                            If you have questions about this Privacy Policy or our data practices, please contact us at privacy@kodasync.com.
+                            If you have questions about this Privacy Policy or our data practices, please contact us at{" "}
+                            <a href="mailto:onboarding@kodasync.app" className="underline hover:text-black">
+                                onboarding@kodasync.app
+                            </a>.
                         </p>
                     </section>
                 </div>
