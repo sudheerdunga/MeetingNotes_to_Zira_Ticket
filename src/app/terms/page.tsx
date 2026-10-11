@@ -82,7 +82,10 @@ export default function TermsOfServicePage() {
                     <section className="space-y-4">
                         <h2 className="text-2xl font-semibold text-black">8. Contact Us</h2>
                         <p>
-                            If you have any questions about these Terms of Service, please contact us at support@kodasync.com.
+                            If you have any questions about these Terms of Service, please contact us at{" "}
+                            <a href="mailto:onboarding@kodasync.app" className="underline hover:text-black">
+                                onboarding@kodasync.app
+                            </a>.
                         </p>
                     </section>
                 </div>
