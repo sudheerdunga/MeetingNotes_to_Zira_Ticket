@@ -2,8 +2,8 @@ import { inngest } from "./client";
 import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-const adminEmail = process.env.ADMIN_EMAIL || "admin@example.com";
-const senderEmail = process.env.SENDER_EMAIL || "onboarding@resend.dev";
+const adminEmail = process.env.ADMIN_EMAIL || "sudheer.analytics@gmail.com";
+const senderEmail = process.env.SENDER_EMAIL || "KodaSync <onboarding@kodasync.app>";
 
 export const sendWaitlistEmails = inngest.createFunction(
     { id: "send-waitlist-emails" },
