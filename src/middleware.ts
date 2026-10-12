@@ -9,6 +9,7 @@ export default auth((req) => {
     req.nextUrl.pathname === "/login" ||
     req.nextUrl.pathname === "/terms" ||
     req.nextUrl.pathname === "/privacy" ||
+    req.nextUrl.pathname === "/thanks" ||
     req.nextUrl.pathname === "/rework"
 
   if (
