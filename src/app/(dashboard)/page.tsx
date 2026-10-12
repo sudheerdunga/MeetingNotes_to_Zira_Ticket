@@ -12,7 +12,7 @@ export default async function Dashboard() {
   const session = await auth();
 
   if (!session) {
-    redirect("/landing");
+    redirect("/login");
   }
 
   const supabase = await createClient();

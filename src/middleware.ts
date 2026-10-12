@@ -3,9 +3,13 @@ import { NextResponse } from "next/server"
 
 export default auth((req) => {
   const isLoggedIn = !!req.auth
+  // If someone visits /landing directly, redirect to home page /
+  if (req.nextUrl.pathname === "/landing") {
+    return NextResponse.redirect(new URL("/", req.url))
+  }
+
   // Allow access to public pages, auth routes, webhooks, and Inngest
   const isPublicRoute =
-    req.nextUrl.pathname === "/landing" ||
     req.nextUrl.pathname === "/login" ||
     req.nextUrl.pathname === "/terms" ||
     req.nextUrl.pathname === "/privacy" ||
@@ -21,11 +25,15 @@ export default auth((req) => {
     return NextResponse.next()
   }
 
-  // Redirect if not authenticated: landing page for root, login for protected routes
-  if (!isLoggedIn) {
-    if (req.nextUrl.pathname === "/") {
-      return NextResponse.redirect(new URL("/landing", req.url))
+  // Handle root /: if not authenticated, serve landing page directly on /
+  if (req.nextUrl.pathname === "/") {
+    if (!isLoggedIn) {
+      return NextResponse.rewrite(new URL("/landing", req.url))
     }
+  }
+
+  // Redirect if not authenticated to login for protected routes
+  if (!isLoggedIn) {
     const loginUrl = new URL("/login", req.url)
     return NextResponse.redirect(loginUrl)
   }
