@@ -73,16 +73,33 @@ export default function TermsOfServicePage() {
                     </section>
 
                     <section className="space-y-4">
-                        <h2 className="text-2xl font-semibold text-black">7. Changes to Terms</h2>
+                        <h2 className="text-2xl font-semibold text-black">7. Subscriptions, Payments & 14-Day Refund Policy</h2>
+                        <p>
+                            KodaSync provides paid subscription plans billed on a monthly or annual recurring basis as displayed on our pricing page. All prices are in USD. Payments are securely processed through our authorized Merchant of Record, Creem (creem.io).
+                        </p>
+                        <p>
+                            <strong>14-Day Money-Back Guarantee:</strong> We offer a 14-day 100% money-back guarantee for all first-time subscription purchases. If KodaSync does not meet your expectations within 14 days of subscribing, simply contact us at{" "}
+                            <a href="mailto:onboarding@kodasync.app" className="underline hover:text-black">
+                                onboarding@kodasync.app
+                            </a>{" "}
+                            and we will issue a full refund to your original payment method.
+                        </p>
+                        <p>
+                            <strong>Cancellations:</strong> You may cancel your subscription at any time through your account settings or customer billing portal. Upon cancellation, your access remains active until the end of your prepaid billing period, with no further charges.
+                        </p>
+                    </section>
+
+                    <section className="space-y-4">
+                        <h2 className="text-2xl font-semibold text-black">8. Changes to Terms</h2>
                         <p>
                             We reserve the right to update these Terms at any time. We will notify users of significant changes by posting the updated Terms on this page. Your continued use of the Service after changes are published constitutes acceptance of the modified Terms.
                         </p>
                     </section>
 
                     <section className="space-y-4">
-                        <h2 className="text-2xl font-semibold text-black">8. Contact Us</h2>
+                        <h2 className="text-2xl font-semibold text-black">9. Contact Us</h2>
                         <p>
-                            If you have any questions about these Terms of Service, please contact us at{" "}
+                            If you have any questions about these Terms of Service, billing, or refunds, please contact us at{" "}
                             <a href="mailto:onboarding@kodasync.app" className="underline hover:text-black">
                                 onboarding@kodasync.app
                             </a>.

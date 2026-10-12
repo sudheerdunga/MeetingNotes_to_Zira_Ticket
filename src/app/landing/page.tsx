@@ -10,7 +10,9 @@ import {
     ArrowPathIcon as RefreshCcw,
     SparklesIcon as Sparkles,
     MagnifyingGlassIcon as Search,
-    UsersIcon as Users
+    UsersIcon as Users,
+    CheckIcon as Check,
+    ShieldCheckIcon as ShieldCheck
 } from '@heroicons/react/24/outline';
 import { CheckCircleIcon as CheckCircle2 } from '@heroicons/react/24/solid';
 import { joinWaitlist } from '@/app/actions';
@@ -59,9 +61,10 @@ const EXAMPLES = [
 ];
 
 export default function LandingPage() {
+    const [billingInterval, setBillingInterval] = useState<'monthly' | 'yearly'>('monthly');
     const [email, setEmail] = useState('');
     const [submitted, setSubmitted] = useState(false);
-    const [feedback, setFeedback] = useState("Welcome to the Founding 5! We'll reach out shortly.");
+    const [feedback, setFeedback] = useState("Welcome to KodaSync! We'll reach out shortly.");
     const [loading, setLoading] = useState(false);
     const [activeExampleIndex, setActiveExampleIndex] = useState(0);
     const activeExample = EXAMPLES[activeExampleIndex];
@@ -102,19 +105,27 @@ export default function LandingPage() {
                 <Link href="/" className="flex items-center gap-2">
                     <img src="/KodaSync_Logo_1.png?v=3" alt="KodaSync Logo" className="h-auto w-30" />
                 </Link>
+                <div className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-600">
+                    <a href="#pain" className="hover:text-black transition-colors">The Problem</a>
+                    <a href="#how-it-works" className="hover:text-black transition-colors">How It Works</a>
+                    <a href="#pricing" className="text-black font-semibold hover:text-indigo-600 transition-colors">Pricing</a>
+                    <a href="#faq" className="hover:text-black transition-colors">FAQ</a>
+                </div>
                 <div className="flex gap-4 items-center">
                     <Link href="/login">
                         <Button variant="ghost">Login</Button>
                     </Link>
-                    <Button onClick={() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })}>
-                        Join Waitlist
+                    <Button onClick={() => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' })}>
+                        Get Started
                     </Button>
                 </div>
             </nav>
 
             {/* Hero Section */}
             <header className="pt-40 pb-20 px-6 max-w-7xl mx-auto text-center flex flex-col items-center animate-in fade-in slide-in-from-bottom-4 duration-700">
-                <Badge variant="secondary" className="mb-8 py-1.5 px-4 text-sm font-medium">Free for Early Beta Adaptors</Badge>
+                <Badge variant="secondary" className="mb-8 py-1.5 px-4 text-sm font-medium">
+                    Built for Modern Product Teams
+                </Badge>
                 <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-8 leading-tight">
                     Stop Rewatching User Interviews. <br />
                     <span className="text-black/70">Start Fixing What’s Broken.</span>
@@ -123,13 +134,20 @@ export default function LandingPage() {
                     KodaSync automatically extracts high-signal friction points from your Fireflies or Fathom calls and turns them into ready-to-code Jira tickets.
                 </p>
                 <div className="flex flex-col items-center gap-4">
-                    <Button
-                        size="lg"
-                        className="text-lg px-8 h-14"
-                        onClick={() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })}
-                    >
-                        Get Early Access — Free for Beta
-                    </Button>
+                    <div className="flex flex-col sm:flex-row gap-3">
+                        <Button
+                            size="lg"
+                            className="text-lg px-8 h-14"
+                            onClick={() => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' })}
+                        >
+                            View Plans & Pricing
+                        </Button>
+                        <Link href="/login">
+                            <Button size="lg" variant="outline" className="text-lg px-8 h-14">
+                                Sign In
+                            </Button>
+                        </Link>
+                    </div>
                     <div className="text-sm text-gray-400 font-medium">
                         &quot;Integrates with Fireflies, Fathom, and Jira in 60 seconds.&quot;
                     </div>
@@ -355,7 +373,7 @@ export default function LandingPage() {
                             So, I built KodaSync to fix it. It automatically catches high-signal user friction, adds precision timestamps, and generates ready-to-code Jira tickets. Under the hood, a fast Next.js stack powered by Inngest handles the heavy lifting in the background.
                         </p>
                         <p>
-                            I’m looking for 5 PMs to join the founding beta for free lifetime access. Let&apos;s build together!
+                            I built KodaSync to eliminate the manual chore of typing up Jira tickets so you can focus on building what truly matters.
                         </p>
                         <div className="text-sm font-semibold text-black pt-2">
                             &mdash; Sudheer
@@ -364,8 +382,241 @@ export default function LandingPage() {
                 </div>
             </section>
 
+            {/* Pricing Section */}
+            <section id="pricing" className="py-24 px-6 max-w-7xl mx-auto border-t border-gray-100">
+                <div className="text-center max-w-3xl mx-auto mb-16">
+                    <Badge variant="outline" className="mb-4">Plans & Pricing</Badge>
+                    <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4">
+                        Turn Customer Calls into Backlog Gold
+                    </h2>
+                    <p className="text-lg text-gray-500">
+                        Choose the plan that fits your workflow. Every plan includes our 14-day 100% money-back guarantee.
+                    </p>
+
+                    {/* Billing Cycle Toggle */}
+                    <div className="flex items-center justify-center gap-3 mt-8">
+                        <span className={`text-sm font-medium ${billingInterval === 'monthly' ? 'text-black' : 'text-gray-400'}`}>
+                            Monthly
+                        </span>
+                        <button
+                            type="button"
+                            onClick={() => setBillingInterval(prev => prev === 'monthly' ? 'yearly' : 'monthly')}
+                            className="relative inline-flex h-7 w-14 items-center rounded-full bg-gray-200 transition-colors focus:outline-none cursor-pointer"
+                            aria-label="Toggle billing interval"
+                        >
+                            <span
+                                className={`inline-block h-5 w-5 transform rounded-full bg-black transition-transform ${
+                                    billingInterval === 'yearly' ? 'translate-x-8' : 'translate-x-1'
+                                }`}
+                            />
+                        </button>
+                        <span className={`text-sm font-medium flex items-center gap-1.5 ${billingInterval === 'yearly' ? 'text-black' : 'text-gray-400'}`}>
+                            Yearly
+                            <span className="bg-emerald-100 text-emerald-800 text-xs px-2 py-0.5 rounded-full font-semibold">
+                                Save 20%
+                            </span>
+                        </span>
+                    </div>
+                </div>
+
+                {/* Pricing Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto items-stretch">
+                    
+                    {/* Solo PM Plan */}
+                    <div className="rounded-3xl border border-gray-200 bg-white p-8 shadow-sm flex flex-col justify-between hover:border-gray-300 transition-all">
+                        <div>
+                            <div className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Solo PM</div>
+                            <h3 className="text-2xl font-bold text-black mb-2">Individual Builders</h3>
+                            <p className="text-sm text-gray-500 mb-6">For solo PMs, UX researchers, and technical founders.</p>
+                            
+                            <div className="flex items-baseline gap-1 mb-6">
+                                <span className="text-5xl font-extrabold text-black">
+                                    ${billingInterval === 'yearly' ? '19' : '24'}
+                                </span>
+                                <span className="text-gray-500 text-sm font-medium">/ month</span>
+                            </div>
+                            {billingInterval === 'yearly' && (
+                                <p className="text-xs text-gray-400 -mt-4 mb-6">Billed annually ($228 / year)</p>
+                            )}
+
+                            <div className="border-t border-gray-100 pt-6 space-y-3 mb-8 text-sm">
+                                <div className="flex items-start gap-3">
+                                    <Check className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+                                    <span><strong>Up to 20</strong> meeting syncs / month</span>
+                                </div>
+                                <div className="flex items-start gap-3">
+                                    <Check className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+                                    <span>Fireflies & Fathom automatic sync</span>
+                                </div>
+                                <div className="flex items-start gap-3">
+                                    <Check className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+                                    <span>Manual transcripts & text upload</span>
+                                </div>
+                                <div className="flex items-start gap-3">
+                                    <Check className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+                                    <span>Claude 3.7 friction & bug extraction</span>
+                                </div>
+                                <div className="flex items-start gap-3">
+                                    <Check className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+                                    <span>Timestamped quotes (&quot;receipts&quot;)</span>
+                                </div>
+                                <div className="flex items-start gap-3">
+                                    <Check className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+                                    <span>1 connected Jira Cloud workspace</span>
+                                </div>
+                                <div className="flex items-start gap-3">
+                                    <Check className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+                                    <span>Standard email support</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <Link href="/login?plan=solo" className="w-full">
+                            <Button variant="outline" size="lg" className="w-full h-12 text-base font-medium">
+                                Get Solo PM
+                            </Button>
+                        </Link>
+                    </div>
+
+                    {/* Pro Plan (Featured) */}
+                    <div className="relative rounded-3xl border-2 border-black bg-white p-8 shadow-xl flex flex-col justify-between transform md:-translate-y-2">
+                        <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-black text-white text-xs font-bold uppercase tracking-wider py-1.5 px-4 rounded-full shadow-sm">
+                            Most Popular
+                        </div>
+
+                        <div>
+                            <div className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Pro Plan</div>
+                            <h3 className="text-2xl font-bold text-black mb-2">Growth Teams</h3>
+                            <p className="text-sm text-gray-500 mb-6">For senior PMs and fast-paced product squads.</p>
+                            
+                            <div className="flex items-baseline gap-1 mb-6">
+                                <span className="text-5xl font-extrabold text-black">
+                                    ${billingInterval === 'yearly' ? '39' : '49'}
+                                </span>
+                                <span className="text-gray-500 text-sm font-medium">/ month</span>
+                            </div>
+                            {billingInterval === 'yearly' && (
+                                <p className="text-xs text-gray-400 -mt-4 mb-6">Billed annually ($468 / year)</p>
+                            )}
+
+                            <div className="border-t border-gray-100 pt-6 space-y-3 mb-8 text-sm">
+                                <div className="flex items-start gap-3 font-medium">
+                                    <Check className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+                                    <span><strong>Unlimited</strong> meeting transcript syncs</span>
+                                </div>
+                                <div className="flex items-start gap-3">
+                                    <Check className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+                                    <span><strong>Unlimited</strong> Jira workspaces & projects</span>
+                                </div>
+                                <div className="flex items-start gap-3">
+                                    <Check className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+                                    <span>AI Severity tags (Critical, High, UX)</span>
+                                </div>
+                                <div className="flex items-start gap-3">
+                                    <Check className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+                                    <span>Custom Jira issue templates & mapping</span>
+                                </div>
+                                <div className="flex items-start gap-3">
+                                    <Check className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+                                    <span>1-Click Jira ticket creation with receipts</span>
+                                </div>
+                                <div className="flex items-start gap-3">
+                                    <Check className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+                                    <span>Priority AI processing queue</span>
+                                </div>
+                                <div className="flex items-start gap-3">
+                                    <Check className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+                                    <span>Priority support (&lt; 24h response time)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <Link href="/login?plan=pro" className="w-full">
+                            <Button size="lg" className="w-full h-12 text-base font-semibold shadow-sm">
+                                Upgrade to Pro
+                            </Button>
+                        </Link>
+                    </div>
+
+                    {/* Team Plan */}
+                    <div className="rounded-3xl border border-gray-200 bg-white p-8 shadow-sm flex flex-col justify-between hover:border-gray-300 transition-all">
+                        <div>
+                            <div className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Team</div>
+                            <h3 className="text-2xl font-bold text-black mb-2">Product Departments</h3>
+                            <p className="text-sm text-gray-500 mb-6">For multi-product companies and agency squads.</p>
+                            
+                            <div className="flex items-baseline gap-1 mb-6">
+                                <span className="text-5xl font-extrabold text-black">
+                                    ${billingInterval === 'yearly' ? '79' : '99'}
+                                </span>
+                                <span className="text-gray-500 text-sm font-medium">/ month</span>
+                            </div>
+                            {billingInterval === 'yearly' && (
+                                <p className="text-xs text-gray-400 -mt-4 mb-6">Billed annually ($948 / year)</p>
+                            )}
+
+                            <div className="border-t border-gray-100 pt-6 space-y-3 mb-8 text-sm">
+                                <div className="flex items-start gap-3 font-medium">
+                                    <Check className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+                                    <span><strong>Everything in Pro</strong></span>
+                                </div>
+                                <div className="flex items-start gap-3">
+                                    <Check className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+                                    <span><strong>5 Member Seats</strong> included</span>
+                                </div>
+                                <div className="flex items-start gap-3">
+                                    <Check className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+                                    <span>Centralized team feedback repository</span>
+                                </div>
+                                <div className="flex items-start gap-3">
+                                    <Check className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+                                    <span>Multi-project Jira routing rules</span>
+                                </div>
+                                <div className="flex items-start gap-3">
+                                    <Check className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+                                    <span>Shared backlog triage</span>
+                                </div>
+                                <div className="flex items-start gap-3">
+                                    <Check className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+                                    <span>1-on-1 Jira onboarding setup call</span>
+                                </div>
+                                <div className="flex items-start gap-3">
+                                    <Check className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+                                    <span>Dedicated priority Slack & email support</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <Link href="/login?plan=team" className="w-full">
+                            <Button variant="outline" size="lg" className="w-full h-12 text-base font-medium">
+                                Get Team Plan
+                            </Button>
+                        </Link>
+                    </div>
+
+                </div>
+
+                {/* 14-Day Guarantee & Compliance Trust Box */}
+                <div className="mt-14 max-w-4xl mx-auto p-6 md:p-8 rounded-2xl bg-gray-50 border border-gray-200/80 flex flex-col md:flex-row items-center gap-6">
+                    <div className="w-14 h-14 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0">
+                        <ShieldCheck className="w-8 h-8" />
+                    </div>
+                    <div className="space-y-1 text-center md:text-left flex-1">
+                        <h4 className="font-bold text-lg text-black">14-Day 100% Money-Back Guarantee</h4>
+                        <p className="text-sm text-gray-600 leading-relaxed">
+                            Try KodaSync risk-free. If it doesn&apos;t save you at least 3 hours on customer interview processing within your first two weeks, email <a href="mailto:onboarding@kodasync.app" className="underline font-medium text-black">onboarding@kodasync.app</a> for an immediate full refund. No questions asked.
+                        </p>
+                    </div>
+                    <div className="text-xs text-gray-400 text-center md:text-right shrink-0 border-t md:border-t-0 md:border-l border-gray-200 pt-4 md:pt-0 md:pl-6 space-y-1">
+                        <div>🔒 256-Bit SSL Encryption</div>
+                        <div>Powered by <strong>Creem</strong></div>
+                        <div>Cancel anytime with 1-click</div>
+                    </div>
+                </div>
+            </section>
+
             {/* FAQ Section */}
-            <section className="py-24 px-6 max-w-3xl mx-auto border-t border-gray-100">
+            <section id="faq" className="py-24 px-6 max-w-3xl mx-auto border-t border-gray-100">
                 <div className="text-center mb-16">
                     <h2 className="text-3xl font-bold tracking-tight">Frequently Asked Questions</h2>
                 </div>
@@ -404,7 +655,16 @@ export default function LandingPage() {
                                 <svg fill="none" height="24" shapeRendering="geometricPrecision" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewBox="0 0 24 24" width="24"><path d="M6 9l6 6 6-6"></path></svg>
                             </span>
                         </summary>
-                        <p className="text-gray-500 mt-3">During our founding beta, KodaSync is completely free for the first 5 Product Managers. Post-beta pricing will be tiered based on your team's transcript volume.</p>
+                        <p className="text-gray-500 mt-3">We offer three straightforward paid plans: Solo PM at $24/mo ($19/mo billed yearly), Pro with unlimited meeting syncs at $49/mo ($39/mo billed yearly), and Team at $99/mo ($79/mo billed yearly) for up to 5 seats. All plans include our 14-day 100% money-back guarantee.</p>
+                    </details>
+                    <details className="group border-b border-gray-200 pb-4">
+                        <summary className="flex justify-between items-center font-semibold cursor-pointer list-none text-lg [&::-webkit-details-marker]:hidden">
+                            How does the 14-day money-back guarantee work?
+                            <span className="transition group-open:rotate-180">
+                                <svg fill="none" height="24" shapeRendering="geometricPrecision" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewBox="0 0 24 24" width="24"><path d="M6 9l6 6 6-6"></path></svg>
+                            </span>
+                        </summary>
+                        <p className="text-gray-500 mt-3">If you are not completely satisfied with KodaSync within your first 14 days of subscribing, simply email onboarding@kodasync.app and we will issue a full 100% refund immediately back to your original payment method. No questions asked.</p>
                     </details>
                     <details className="group border-b border-gray-200 pb-4">
                         <summary className="flex justify-between items-center font-semibold cursor-pointer list-none text-lg [&::-webkit-details-marker]:hidden">
@@ -418,47 +678,46 @@ export default function LandingPage() {
                 </div>
             </section>
 
-            {/* Beta Closer */}
+            {/* CTA Closer */}
             <section className="py-32 px-6 max-w-7xl mx-auto text-center border-t border-gray-100">
                 <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-8">
-                    Help us build the future of <br />Product Discovery.
+                    Start Turning Customer Calls into <br />Shipped Jira Features.
                 </h2>
-                <p className="text-xl text-gray-500 max-w-3xl mx-auto mb-12">
-                    &quot;We are looking for <strong className="text-black">5 Product Managers</strong> to join our founding beta. You&apos;ll get free access for life and direct influence over our feature roadmap.&quot;
+                <p className="text-xl text-gray-500 max-w-3xl mx-auto mb-10">
+                    Connect Fireflies or Fathom in under 60 seconds. Backed by our 14-day 100% money-back guarantee.
                 </p>
-
-                {!submitted ? (
-                    <form className="max-w-md mx-auto flex flex-col sm:flex-row gap-3" onSubmit={handleSubmit}>
-                        <Input
-                            type="email"
-                            placeholder="Enter your work email"
-                            className="h-12 text-base"
-                            required
-                            disabled={loading}
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                        />
-                        <Button type="submit" size="lg" className="h-12 w-full sm:w-auto shrink-0" disabled={loading}>
-                            {loading ? 'Joining...' : 'Join the Beta Waitlist'}
+                <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                    <Button
+                        size="lg"
+                        className="text-lg px-8 h-14"
+                        onClick={() => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' })}
+                    >
+                        Choose Your Plan
+                    </Button>
+                    <Link href="/login">
+                        <Button size="lg" variant="outline" className="text-lg px-8 h-14">
+                            Log In to Dashboard
                         </Button>
-                    </form>
-                ) : (
-                    <div className="max-w-md mx-auto p-8 rounded-2xl bg-gray-50 border border-gray-100 text-black font-semibold flex flex-col items-center">
-                        <CheckCircle2 className="w-10 h-10 mb-4 text-green-600" />
-                        {feedback}
-                    </div>
-                )}
+                    </Link>
+                </div>
             </section>
 
             <footer className="relative w-full overflow-hidden">
                 {/* Soft pastel gradient separator matching the requested style */}
                 <div className="w-full h-16 bg-gradient-to-r from-violet-400 via-teal-300 to-green-400 opacity-80 blur-[12px] transform scale-110"></div>
                 
-                <div className="relative py-10 bg-white text-center text-gray-400 text-sm flex flex-col items-center gap-2 border-t border-gray-50 z-10">
+                <div className="relative py-10 bg-white text-center text-gray-400 text-sm flex flex-col items-center gap-3 border-t border-gray-50 z-10">
                     <div>&copy; 2026 KodaSync. All rights reserved. Built for modern product teams.</div>
-                    <div className="flex gap-4 mt-2">
+                    <div className="flex gap-6 mt-1 flex-wrap justify-center">
+                        <a href="#pricing" className="hover:text-black transition-colors font-medium">Pricing</a>
                         <Link href="/terms" className="hover:text-black transition-colors">Terms of Service</Link>
                         <Link href="/privacy" className="hover:text-black transition-colors">Privacy Policy</Link>
+                        <a href="mailto:onboarding@kodasync.app?subject=KodaSync%20Affiliate%20Program%20Inquiry" className="hover:text-black transition-colors flex items-center gap-1 font-medium text-indigo-600">
+                            Affiliate Program (Earn 30%)
+                        </a>
+                    </div>
+                    <div className="text-xs text-gray-400 mt-2">
+                        Merchant of Record and payments securely handled by Creem (creem.io).
                     </div>
                 </div>
             </footer>
