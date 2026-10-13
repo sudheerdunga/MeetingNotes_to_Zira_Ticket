@@ -471,11 +471,11 @@ export default function LandingPage() {
                             </div>
                         </div>
 
-                        <Link href="/login?plan=solo" className="w-full">
+                        <a href="https://www.creem.io/payment/prod_1kXZzVs7hoiOeYfdzzYewQ" className="w-full">
                             <Button variant="outline" size="lg" className="w-full h-12 text-base font-medium">
                                 Get Solo PM
                             </Button>
-                        </Link>
+                        </a>
                     </div>
 
                     {/* Pro Plan (Featured) */}
@@ -531,11 +531,11 @@ export default function LandingPage() {
                             </div>
                         </div>
 
-                        <Link href="/login?plan=pro" className="w-full">
+                        <a href="https://www.creem.io/payment/prod_7AyBa62832y0qSAuLC436T" className="w-full">
                             <Button size="lg" className="w-full h-12 text-base font-semibold shadow-sm">
                                 Upgrade to Pro
                             </Button>
-                        </Link>
+                        </a>
                     </div>
 
                     {/* Team Plan */}
@@ -587,11 +587,11 @@ export default function LandingPage() {
                             </div>
                         </div>
 
-                        <Link href="/login?plan=team" className="w-full">
+                        <a href="https://www.creem.io/payment/prod_PGG76luBH5Cdc6XNSeuC8" className="w-full">
                             <Button variant="outline" size="lg" className="w-full h-12 text-base font-medium">
                                 Get Team Plan
                             </Button>
-                        </Link>
+                        </a>
                     </div>
 
                 </div>
