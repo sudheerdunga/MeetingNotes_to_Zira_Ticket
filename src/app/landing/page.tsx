@@ -425,16 +425,24 @@ export default function LandingPage() {
                     {/* Solo PM Plan */}
                     <div className="rounded-3xl border border-gray-200 bg-white p-8 shadow-sm flex flex-col justify-between hover:border-gray-300 transition-all">
                         <div>
-                            <div className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Solo PM</div>
+                            <div className="flex justify-between items-center mb-2">
+                                <span className="text-sm font-semibold text-gray-500 uppercase tracking-wider">Solo PM</span>
+                                <span className="bg-indigo-50 text-indigo-700 border border-indigo-100 text-xs px-2.5 py-0.5 rounded-full font-semibold">
+                                    7-Day Trial
+                                </span>
+                            </div>
                             <h3 className="text-2xl font-bold text-black mb-2">Individual Builders</h3>
                             <p className="text-sm text-gray-500 mb-6">For solo PMs, UX researchers, and technical founders.</p>
                             
-                            <div className="flex items-baseline gap-1 mb-6">
+                            <div className="flex items-baseline gap-1 mb-1">
                                 <span className="text-5xl font-extrabold text-black">
                                     ${billingInterval === 'yearly' ? '19' : '24'}
                                 </span>
                                 <span className="text-gray-500 text-sm font-medium">/ month</span>
                             </div>
+                            <p className="text-xs font-semibold text-indigo-600 mb-6">
+                                ✨ 7-day full access trial for just $1
+                            </p>
                             {billingInterval === 'yearly' && (
                                 <p className="text-xs text-gray-400 -mt-4 mb-6">Billed annually ($228 / year)</p>
                             )}
@@ -472,8 +480,8 @@ export default function LandingPage() {
                         </div>
 
                         <a href="https://www.creem.io/payment/prod_1kXZzVs7hoiOeYfdzzYewQ" className="w-full">
-                            <Button variant="outline" size="lg" className="w-full h-12 text-base font-medium">
-                                Get Solo PM
+                            <Button variant="outline" size="lg" className="w-full h-12 text-base font-semibold border-gray-300 hover:bg-gray-50">
+                                Try 7 Days for $1
                             </Button>
                         </a>
                     </div>
@@ -655,7 +663,7 @@ export default function LandingPage() {
                                 <svg fill="none" height="24" shapeRendering="geometricPrecision" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewBox="0 0 24 24" width="24"><path d="M6 9l6 6 6-6"></path></svg>
                             </span>
                         </summary>
-                        <p className="text-gray-500 mt-3">We offer three straightforward paid plans: Solo PM at $24/mo ($19/mo billed yearly), Pro with unlimited meeting syncs at $49/mo ($39/mo billed yearly), and Team at $99/mo ($79/mo billed yearly) for up to 5 seats. All plans include our 14-day 100% money-back guarantee.</p>
+                        <p className="text-gray-500 mt-3">We offer three straightforward paid plans: Solo PM at $24/mo ($19/mo billed yearly) with a 7-day full access trial for just $1, Pro with unlimited meeting syncs at $49/mo ($39/mo billed yearly), and Team at $99/mo ($79/mo billed yearly) for up to 5 seats. All plans include our 14-day 100% money-back guarantee.</p>
                     </details>
                     <details className="group border-b border-gray-200 pb-4">
                         <summary className="flex justify-between items-center font-semibold cursor-pointer list-none text-lg [&::-webkit-details-marker]:hidden">
