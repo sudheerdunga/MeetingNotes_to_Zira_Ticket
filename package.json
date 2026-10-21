@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^3.0.42",
+    "@ai-sdk/google": "^3.0.137",
     "@atlaskit/adf-utils": "^19.27.0",
     "@base-ui/react": "^1.6.0",
     "@heroicons/react": "^2.2.0",

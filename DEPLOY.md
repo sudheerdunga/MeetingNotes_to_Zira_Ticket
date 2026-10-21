@@ -34,7 +34,7 @@ We have added a `railway.json` file and a `start:worker:prod` script to support 
    - `NODE_ENV=production`
    - `INNGEST_EVENT_KEY` (Get from Inngest dashboard)
    - `INNGEST_SIGNING_KEY` (Get from Inngest dashboard)
-   - `ANTHROPIC_API_KEY`
+   - `GEMINI_API_KEY` (or `ANTHROPIC_API_KEY`)
    - `NEXT_PUBLIC_SUPABASE_URL`
    - `SUPABASE_SERVICE_ROLE_KEY`
 5. Railway will automatically rebuild and deploy the worker once the variables are set.

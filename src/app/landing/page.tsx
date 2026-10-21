@@ -462,7 +462,7 @@ export default function LandingPage() {
                                 </div>
                                 <div className="flex items-start gap-3">
                                     <Check className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
-                                    <span>Claude 3.7 friction & bug extraction</span>
+                                    <span>Gemini 2.5 Flash friction & bug extraction</span>
                                 </div>
                                 <div className="flex items-start gap-3">
                                     <Check className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
