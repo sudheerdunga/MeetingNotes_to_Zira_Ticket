@@ -11,6 +11,9 @@ declare module "next-auth" {
         user: {
             /** The user's postal address. */
             address: string
+            hasOnboarded?: boolean
+            hasSeenTour?: boolean
+            isNewUser?: boolean
         } & DefaultSession["user"]
     }
 }
@@ -21,5 +24,8 @@ declare module "next-auth/jwt" {
         accessToken?: string
         jiraAccessToken?: string
         jiraRefreshToken?: string
+        hasOnboarded?: boolean
+        hasSeenTour?: boolean
+        isNewUser?: boolean
     }
 }

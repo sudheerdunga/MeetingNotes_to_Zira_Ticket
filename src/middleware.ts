@@ -40,14 +40,18 @@ export default auth((req) => {
 
   // Check onboarding status
   const isOnboardingRoute = req.nextUrl.pathname.startsWith("/onboarding")
-  const hasOnboarded = req.cookies.get("has_onboarded")?.value === "true"
+  const sessionUser = req.auth?.user as any
+  const isNewUser = sessionUser?.isNewUser === true
+  const hasOnboarded = sessionUser?.hasOnboarded === true || req.cookies.get("has_onboarded")?.value === "true"
 
-  if (isLoggedIn && !hasOnboarded && !isOnboardingRoute) {
+  // Only force new users who haven't onboarded to /onboarding
+  if (isLoggedIn && isNewUser && !hasOnboarded && !isOnboardingRoute) {
     const onboardingUrl = new URL("/onboarding", req.url)
     return NextResponse.redirect(onboardingUrl)
   }
 
-  if (isLoggedIn && hasOnboarded && isOnboardingRoute) {
+  // If user has already onboarded or is an existing user, prevent visiting /onboarding
+  if (isLoggedIn && (hasOnboarded || !isNewUser) && isOnboardingRoute) {
     return NextResponse.redirect(new URL("/", req.url))
   }
 

@@ -9,7 +9,9 @@ const Joyride = dynamic(
     { ssr: false }
 ) as any;
 
-export function ProductTour() {
+import { markTourAsSeenAction } from "@/app/onboarding/actions";
+
+export function ProductTour({ userEmail }: { userEmail?: string }) {
     const [run, setRun] = useState(false);
 
     const steps: Step[] = [
@@ -40,24 +42,50 @@ export function ProductTour() {
         }
     ];
 
-    useEffect(() => {
-        // Check local storage to ensure the tour only runs once
-        const hasSeenTour = localStorage.getItem('has_seen_tour');
-        if (!hasSeenTour) {
-            // Slight delay so the UI can load and elements are in the DOM
-            setTimeout(() => {
-                setRun(true);
-            }, 1000);
+    const markSeen = () => {
+        try {
+            localStorage.setItem('has_seen_tour', 'true');
+            if (userEmail) {
+                localStorage.setItem(`has_seen_tour_${userEmail}`, 'true');
+            }
+            // Mark in cookies
+            document.cookie = "has_seen_tour=true; path=/; max-age=315360000; SameSite=Lax";
+            // Persist to database
+            markTourAsSeenAction().catch((err) => {
+                console.error("Failed to persist tour seen state to database:", err);
+            });
+        } catch (e) {
+            console.error("Error storing tour state in localStorage:", e);
         }
-    }, []);
+    };
+
+    useEffect(() => {
+        // Check local storage and cookie to ensure the tour only runs once
+        const globalSeen = localStorage.getItem('has_seen_tour') === 'true';
+        const userSeen = userEmail ? localStorage.getItem(`has_seen_tour_${userEmail}`) === 'true' : false;
+        const cookieSeen = document.cookie.includes('has_seen_tour=true');
+
+        if (!globalSeen && !userSeen && !cookieSeen) {
+            // Slight delay so the UI can load and elements are in the DOM
+            const timer = setTimeout(() => {
+                setRun(true);
+                // Mark seen right away so that even if the user refreshes or closes the page on step 1,
+                // the tour is considered shown once and will never annoy them again
+                markSeen();
+            }, 1000);
+
+            return () => clearTimeout(timer);
+        }
+    }, [userEmail]);
 
     const handleJoyrideCallback = (data: any) => {
-        const { status } = data;
+        const { status, action } = data;
         const finishedStatuses: string[] = [STATUS.FINISHED, STATUS.SKIPPED];
+        const isClosingAction = action === 'close' || action === 'skip' || action === 'stop';
         
-        if (finishedStatuses.includes(status)) {
+        if (finishedStatuses.includes(status) || isClosingAction) {
             setRun(false);
-            localStorage.setItem('has_seen_tour', 'true');
+            markSeen();
         }
     };
 

@@ -14,9 +14,13 @@ export default async function DashboardLayout({
         redirect("/login");
     }
 
+    const isNewUser = (session.user as any)?.isNewUser === true;
+    const hasSeenTour = (session.user as any)?.hasSeenTour === true;
+    const shouldShowTour = isNewUser && !hasSeenTour;
+
     return (
         <div className="app-container">
-            <ProductTour />
+            {shouldShowTour && <ProductTour userEmail={session.user?.email || ""} />}
             <Sidebar session={session} />
             <main className="main-content">
                 {children}
