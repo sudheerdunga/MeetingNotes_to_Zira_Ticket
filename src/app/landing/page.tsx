@@ -14,12 +14,9 @@ import {
     CheckIcon as Check,
     ShieldCheckIcon as ShieldCheck
 } from '@heroicons/react/24/outline';
-import { CheckCircleIcon as CheckCircle2 } from '@heroicons/react/24/solid';
-import { joinWaitlist } from '@/app/actions';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
 
 const EXAMPLES = [
     {
@@ -62,36 +59,8 @@ const EXAMPLES = [
 
 export default function LandingPage() {
     const [billingInterval, setBillingInterval] = useState<'monthly' | 'yearly'>('monthly');
-    const [email, setEmail] = useState('');
-    const [submitted, setSubmitted] = useState(false);
-    const [feedback, setFeedback] = useState("Welcome to KodaSync! We'll reach out shortly.");
-    const [loading, setLoading] = useState(false);
     const [activeExampleIndex, setActiveExampleIndex] = useState(0);
     const activeExample = EXAMPLES[activeExampleIndex];
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!email) return;
-
-        setLoading(true);
-        const formData = new FormData();
-        formData.append('email', email);
-
-        try {
-            const result = await joinWaitlist(formData);
-            if (result.success || result.message) {
-                setSubmitted(true);
-                if (result.message) setFeedback(result.message);
-            } else if (result.error) {
-                alert(result.error);
-            }
-        } catch (err) {
-            console.error(err);
-            alert("Something went wrong. Please try again.");
-        } finally {
-            setLoading(false);
-        }
-    };
 
     return (
         <div className="min-h-screen text-black font-sans overflow-x-hidden selection:bg-black selection:text-white relative z-0">

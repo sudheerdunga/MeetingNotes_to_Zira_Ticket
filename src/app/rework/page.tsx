@@ -12,12 +12,9 @@ import {
     MagnifyingGlassIcon as Search,
     UsersIcon as Users
 } from '@heroicons/react/24/outline';
-import { CheckCircleIcon as CheckCircle2 } from '@heroicons/react/24/solid';
-import { joinWaitlist } from '@/app/actions';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
 
 const EXAMPLES = [
     {
@@ -59,36 +56,8 @@ const EXAMPLES = [
 ];
 
 export default function LandingPage() {
-    const [email, setEmail] = useState('');
-    const [submitted, setSubmitted] = useState(false);
-    const [feedback, setFeedback] = useState("Welcome to the Founding 5! We'll reach out shortly.");
-    const [loading, setLoading] = useState(false);
     const [activeExampleIndex, setActiveExampleIndex] = useState(0);
     const activeExample = EXAMPLES[activeExampleIndex];
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!email) return;
-
-        setLoading(true);
-        const formData = new FormData();
-        formData.append('email', email);
-
-        try {
-            const result = await joinWaitlist(formData);
-            if (result.success || result.message) {
-                setSubmitted(true);
-                if (result.message) setFeedback(result.message);
-            } else if (result.error) {
-                alert(result.error);
-            }
-        } catch (err) {
-            console.error(err);
-            alert("Something went wrong. Please try again.");
-        } finally {
-            setLoading(false);
-        }
-    };
 
     return (
         <div className="min-h-screen text-black font-sans overflow-x-hidden selection:bg-black selection:text-white relative z-0">
@@ -106,9 +75,9 @@ export default function LandingPage() {
                     <Link href="/login">
                         <Button variant="ghost">Login</Button>
                     </Link>
-                    <Button onClick={() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })}>
-                        Join Waitlist
-                    </Button>
+                    <Link href="/login">
+                        <Button>Get Started</Button>
+                    </Link>
                 </div>
             </nav>
 
@@ -123,13 +92,14 @@ export default function LandingPage() {
                     KodaSync automatically extracts high-signal friction points from your Fireflies or Fathom calls and turns them into ready-to-code Jira tickets.
                 </p>
                 <div className="flex flex-col items-center gap-4">
-                    <Button
-                        size="lg"
-                        className="text-lg px-8 h-14"
-                        onClick={() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })}
-                    >
-                        Get Early Access — Free for Beta
-                    </Button>
+                    <Link href="/login">
+                        <Button
+                            size="lg"
+                            className="text-lg px-8 h-14"
+                        >
+                            Get Started — Free for Beta
+                        </Button>
+                    </Link>
                     <div className="text-sm text-gray-400 font-medium">
                         &quot;Integrates with Fireflies, Fathom, and Jira in 60 seconds.&quot;
                     </div>
@@ -404,7 +374,7 @@ export default function LandingPage() {
                                 <svg fill="none" height="24" shapeRendering="geometricPrecision" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewBox="0 0 24 24" width="24"><path d="M6 9l6 6 6-6"></path></svg>
                             </span>
                         </summary>
-                        <p className="text-gray-500 mt-3">During our founding beta, KodaSync is completely free for the first 5 Product Managers. Post-beta pricing will be tiered based on your team's transcript volume.</p>
+                        <p className="text-gray-500 mt-3">During our founding beta, KodaSync is completely free for the first 5 Product Managers. Post-beta pricing will be tiered based on your team&apos;s transcript volume.</p>
                     </details>
                     <details className="group border-b border-gray-200 pb-4">
                         <summary className="flex justify-between items-center font-semibold cursor-pointer list-none text-lg [&::-webkit-details-marker]:hidden">
@@ -427,27 +397,13 @@ export default function LandingPage() {
                     &quot;We are looking for <strong className="text-black">5 Product Managers</strong> to join our founding beta. You&apos;ll get free access for life and direct influence over our feature roadmap.&quot;
                 </p>
 
-                {!submitted ? (
-                    <form className="max-w-md mx-auto flex flex-col sm:flex-row gap-3" onSubmit={handleSubmit}>
-                        <Input
-                            type="email"
-                            placeholder="Enter your work email"
-                            className="h-12 text-base"
-                            required
-                            disabled={loading}
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                        />
-                        <Button type="submit" size="lg" className="h-12 w-full sm:w-auto shrink-0" disabled={loading}>
-                            {loading ? 'Joining...' : 'Join the Beta Waitlist'}
+                <div className="flex justify-center">
+                    <Link href="/login">
+                        <Button size="lg" className="h-12 px-8 text-base">
+                            Get Started Now
                         </Button>
-                    </form>
-                ) : (
-                    <div className="max-w-md mx-auto p-8 rounded-2xl bg-gray-50 border border-gray-100 text-black font-semibold flex flex-col items-center">
-                        <CheckCircle2 className="w-10 h-10 mb-4 text-green-600" />
-                        {feedback}
-                    </div>
-                )}
+                    </Link>
+                </div>
             </section>
 
             <footer className="relative w-full overflow-hidden">

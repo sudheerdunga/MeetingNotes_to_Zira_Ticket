@@ -194,9 +194,9 @@ export function DashboardClient({
                 <div className="flex items-center gap-3">
                     <Link
                         href="/meetings/new"
-                        className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium bg-foreground text-background hover:opacity-90 transition-all shadow-sm active:scale-95"
+                        className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold bg-primary text-primary-foreground hover:bg-primary/90 transition-all shadow-xs active:scale-95"
                     >
-                        <PlusCircle size={16} />
+                        <PlusCircle size={15} />
                         <span>New Meeting</span>
                     </Link>
                 </div>
@@ -283,7 +283,7 @@ export function DashboardClient({
                             onClick={() => setSelectedCategory("all")}
                             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center gap-1.5 ${
                                 selectedCategory === "all"
-                                    ? "bg-foreground text-background shadow-xs font-semibold"
+                                    ? "bg-primary text-primary-foreground shadow-xs font-semibold"
                                     : "bg-card border border-border text-muted-foreground hover:text-foreground hover:bg-muted"
                             }`}
                         >
@@ -321,7 +321,7 @@ export function DashboardClient({
                             onClick={() => setSelectedCategory("feature")}
                             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center gap-1.5 ${
                                 selectedCategory === "feature"
-                                    ? "bg-blue-600 text-white shadow-xs font-semibold"
+                                    ? "bg-primary text-primary-foreground shadow-xs font-semibold"
                                     : "bg-card border border-border text-muted-foreground hover:text-foreground hover:bg-muted"
                             }`}
                         >
@@ -341,7 +341,7 @@ export function DashboardClient({
                                 placeholder="Filter quotes or keywords..."
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                className="w-full pl-8 pr-7 py-1.5 text-xs rounded-lg border border-border bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-foreground"
+                                className="w-full pl-8 pr-7 py-1.5 text-xs rounded-lg border border-border bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
                             />
                             {searchQuery && (
                                 <button
@@ -393,7 +393,7 @@ export function DashboardClient({
                         )}
                         <Link
                             href="/meetings/new"
-                            className="px-3 py-1.5 rounded-md text-xs font-medium bg-foreground text-background"
+                            className="px-3 py-1.5 rounded-md text-xs font-semibold bg-primary text-primary-foreground hover:bg-primary/90"
                         >
                             + Add Meeting
                         </Link>
@@ -432,14 +432,14 @@ export function DashboardClient({
                                     onClick={() => setSelectedInsightId(insight.id)}
                                     className={`p-4 rounded-xl border transition-all cursor-pointer text-left relative ${
                                         isSelected
-                                            ? "border-foreground bg-card ring-1 ring-foreground/20 shadow-sm"
+                                            ? "border-primary/80 bg-card ring-1 ring-primary/25 shadow-xs"
                                             : "border-border bg-card/60 hover:bg-card hover:border-border/90 hover:shadow-2xs"
                                     }`}
                                 >
                                     {/* Top meta tags */}
                                     <div className="flex items-center justify-between gap-2 mb-2">
                                         <div className="flex items-center gap-1.5 flex-wrap">
-                                            {/* Category Tag */}
+                                             {/* Category Tag */}
                                             <span className={`inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-md border uppercase tracking-wider ${categoryBadge}`}>
                                                 {parsed.category === "bug" && <Bug size={11} />}
                                                 {parsed.category === "friction" && <Flame size={11} />}
@@ -473,7 +473,7 @@ export function DashboardClient({
 
                                     {/* Verbatim quote teaser */}
                                     {parsed.quote && (
-                                        <p className="text-xs text-muted-foreground italic line-clamp-2 leading-relaxed bg-muted/40 p-2 rounded-md border-l-2 border-foreground/30">
+                                        <p className="text-xs text-muted-foreground italic line-clamp-2 leading-relaxed bg-muted/40 p-2 rounded-md border-l-2 border-primary/50">
                                             &ldquo;{parsed.quote}&rdquo;
                                         </p>
                                     )}
@@ -579,7 +579,7 @@ export function DashboardClient({
                                                 href={`https://atlassian.net/browse/${activeInsight.jira_ticket_id}`}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium bg-foreground text-background hover:opacity-90 transition-opacity"
+                                                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold bg-primary text-primary-foreground hover:bg-primary/90 transition-opacity shadow-xs"
                                             >
                                                 <span>Open in Jira</span>
                                                 <ExternalLink size={12} />

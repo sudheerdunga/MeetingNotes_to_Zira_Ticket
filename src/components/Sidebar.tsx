@@ -60,24 +60,27 @@ export function Sidebar({ session }: { session: Session }) {
                             href={item.href}
                             className={`relative flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium transition-all ${
                                 isActive
-                                    ? "bg-foreground text-background shadow-2xs font-semibold"
-                                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                                    ? "bg-sidebar-accent text-sidebar-accent-foreground border border-sidebar-border/80 shadow-xs font-semibold"
+                                    : "text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-foreground"
                             }`}
                         >
-                            <item.icon className="h-4 w-4 shrink-0" />
+                            <item.icon className={`h-4 w-4 shrink-0 transition-colors ${isActive ? "text-primary" : "text-muted-foreground"}`} />
                             <span>{item.name}</span>
+                            {isActive && (
+                                <span className="absolute left-0 top-1.5 bottom-1.5 w-0.5 rounded-r-full bg-primary" />
+                            )}
                         </Link>
                     );
                 })}
             </nav>
 
             {/* Jira Connection Status Pill */}
-            <div className="mb-3 px-2 py-2 rounded-lg bg-muted/50 border border-border/60 text-[11px] flex items-center justify-between">
+            <div className="mb-3 px-2.5 py-2 rounded-lg bg-sidebar-accent/40 border border-sidebar-border text-[11px] flex items-center justify-between">
                 <span className="text-muted-foreground flex items-center gap-1.5">
                     <span className={`h-1.5 w-1.5 rounded-full ${isJiraConnected ? "bg-emerald-500 animate-pulse" : "bg-zinc-400"}`} />
                     Jira Cloud
                 </span>
-                <span className={`font-semibold ${isJiraConnected ? "text-emerald-600 dark:text-emerald-400" : "text-muted-foreground"}`}>
+                <span className={`font-semibold ${isJiraConnected ? "text-emerald-500" : "text-muted-foreground"}`}>
                     {isJiraConnected ? "Connected" : "Disconnected"}
                 </span>
             </div>
@@ -88,7 +91,7 @@ export function Sidebar({ session }: { session: Session }) {
                         <DropdownMenuTrigger className="w-full flex items-center gap-3 p-2 rounded-lg hover:bg-sidebar-accent/50 text-left transition-colors cursor-pointer outline-hidden">
                             <Avatar className="h-9 w-9 border border-sidebar-border">
                                 {user.image && <AvatarImage src={user.image} alt={user.name || "User"} />}
-                                <AvatarFallback className="bg-purple-100 text-purple-700 text-xs font-semibold">
+                                <AvatarFallback className="bg-primary/10 text-primary text-xs font-semibold">
                                     {initials}
                                 </AvatarFallback>
                             </Avatar>

@@ -34,63 +34,46 @@ export function JiraButton({ insightId, hasTicket }: { insightId: string; hasTic
 
     if (hasTicket) {
         return (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '5px', color: '#52c41a', fontSize: '0.85rem' }}>
-                <CheckCircle2 size={16} />
-                <span>In Jira</span>
+            <div className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 text-xs font-semibold">
+                <CheckCircle2 size={15} />
+                <span>Synced in Jira</span>
             </div>
         );
     }
 
     if (isNotConnected) {
         return (
-            <div style={{ marginTop: '10px' }}>
+            <div className="mt-2">
                 <button
                     onClick={handleConnect}
-                    className="btn btn-primary"
-                    style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px',
-                        padding: '6px 12px',
-                        fontSize: '0.85rem',
-                        width: 'auto',
-                        backgroundColor: '#0052CC', // Jira Blue
-                    }}
+                    className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#0052CC] text-white hover:bg-[#0747A6] transition-all shadow-xs cursor-pointer"
                 >
-                    <ExternalLink size={14} />
-                    Connect Jira
+                    <ExternalLink size={13} />
+                    <span>Connect Jira Cloud</span>
                 </button>
-                <p style={{ color: 'var(--secondary-foreground)', opacity: 0.7, fontSize: '0.7rem', marginTop: '5px' }}>
-                    Required to push insights
+                <p className="text-[11px] text-muted-foreground mt-1">
+                    Required to sync insights directly to your backlog
                 </p>
             </div>
         );
     }
 
     return (
-        <div style={{ marginTop: '10px' }}>
+        <div className="mt-2">
             <button
                 onClick={handlePush}
                 disabled={loading}
-                className="btn btn-secondary"
-                style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                    padding: '6px 12px',
-                    fontSize: '0.85rem',
-                    width: 'auto',
-                }}
+                className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-semibold bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50 transition-all shadow-xs active:scale-95 cursor-pointer"
             >
                 {loading ? (
-                    <RefreshCw size={14} className="animate-spin" />
+                    <RefreshCw size={13} className="animate-spin" />
                 ) : (
-                    <ExternalLink size={14} />
+                    <ExternalLink size={13} />
                 )}
-                {loading ? "Pushing..." : "Push to Jira"}
+                <span>{loading ? "Pushing to Jira..." : "Push to Jira Cloud"}</span>
             </button>
             {error && (
-                <p style={{ color: '#ff4d4f', fontSize: '0.75rem', marginTop: '5px', margin: 0 }}>
+                <p className="text-xs text-rose-500 mt-1.5 font-medium">
                     {error}
                 </p>
             )}

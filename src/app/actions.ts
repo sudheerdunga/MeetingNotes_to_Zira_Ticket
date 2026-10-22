@@ -1,12 +1,10 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import { createClient as createSupabaseClient } from '@supabase/supabase-js'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { auth } from '@/auth'
 import { z } from 'zod'
-import { sendWaitlistConfirmation } from '@/lib/email'
 
 const meetingSchema = z.object({
     transcript: z.string().optional(),
@@ -102,58 +100,5 @@ export async function createInsight(formData: FormData) {
     // We don't redirect here, just refresh data usually
 }
 
-const waitlistSchema = z.object({
-    email: z.string().email(),
-})
 
-export async function joinWaitlist(formData: FormData) {
-    const email = formData.get('email') as string
-
-    const validatedFields = waitlistSchema.safeParse({ email })
-
-    if (!validatedFields.success) {
-        return {
-            error: 'Invalid email address',
-        }
-    }
-
-    const supabase = createSupabaseClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-    )
-    const { error } = await supabase.from('waitlist').insert({
-        email: validatedFields.data.email,
-    })
-
-    if (error) {
-        if (error.code === '23505') { // Unique violation
-            return { message: 'You are already on the waitlist!' }
-        }
-        console.error('Error joining waitlist:', error)
-        return { error: 'Failed to join waitlist. Please try again.' }
-    }
-
-    // Send confirmation emails directly via Resend (from onboarding@kodasync.app)
-    try {
-        await sendWaitlistConfirmation(validatedFields.data.email)
-    } catch (emailError) {
-        console.error('Error sending waitlist confirmation email:', emailError)
-    }
-
-    // Optionally dispatch Inngest event if background workers are active
-    try {
-        const { inngest } = await import('@/lib/inngest/client')
-        await inngest.send({
-            name: 'user/waitlist.joined',
-            data: {
-                email: validatedFields.data.email,
-            },
-        })
-    } catch (inngestError) {
-        // Safe fallback if Inngest keys are not configured in environment
-        console.warn('Inngest event dispatch skipped:', inngestError)
-    }
-
-    return { success: true }
-}
 
