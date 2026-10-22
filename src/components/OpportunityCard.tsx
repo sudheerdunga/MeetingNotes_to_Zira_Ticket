@@ -1,59 +1,74 @@
-
 import { Opportunity } from "@/types";
-import { FolderKanban, MessageSquare, TrendingDown } from "lucide-react";
+import { FolderKanban, MessageSquare, TrendingDown, ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 export function OpportunityCard({ opportunity }: { opportunity: Opportunity }) {
     const insights = opportunity.insights || [];
-    const uniqueMeetings = new Set(insights.map(i => i.meeting_id)).size;
+    const uniqueMeetings = new Set(insights.map((i) => i.meeting_id)).size;
 
     return (
-        <div className="card opportunity-card" style={{
-            border: '1px solid var(--primary)',
-            background: 'linear-gradient(145deg, var(--card) 0%, rgba(100, 255, 218, 0.05) 100%)',
-            position: 'relative',
-            overflow: 'hidden'
-        }}>
-            <div style={{ position: 'absolute', top: 0, right: 0, padding: '10px', opacity: 0.1 }}>
-                <FolderKanban size={64} />
-            </div>
-
-            <div className="card-header">
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-                    <div style={{ backgroundColor: 'var(--primary)', color: 'var(--background)', padding: '2px 8px', borderRadius: '4px', fontSize: '0.7rem', fontWeight: 'bold', textTransform: 'uppercase' }}>
-                        Cluster Opportunity
-                    </div>
+        <div className="rounded-xl border border-border bg-card p-5 shadow-2xs hover:border-foreground/30 hover:shadow-xs transition-all flex flex-col justify-between">
+            <div>
+                {/* Header tag */}
+                <div className="flex items-center justify-between gap-2 mb-3">
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[11px] font-semibold bg-indigo-50 text-indigo-700 dark:bg-indigo-950/60 dark:text-indigo-400 border border-indigo-200/80 dark:border-indigo-900/60 uppercase tracking-wider">
+                        <FolderKanban size={12} />
+                        Roadmap Theme
+                    </span>
+                    <span className="text-[11px] font-mono text-muted-foreground">
+                        {new Date(opportunity.created_at).toLocaleDateString(undefined, {
+                            month: "short",
+                            day: "numeric",
+                        })}
+                    </span>
                 </div>
-                <h3 className="card-title" style={{ fontSize: '1.2rem', color: 'var(--primary)' }}>{opportunity.title}</h3>
-            </div>
 
-            <div className="card-content" style={{ marginTop: '12px' }}>
-                <p style={{ fontSize: '0.9rem', opacity: 0.9, lineHeight: '1.5', marginBottom: '15px' }}>
-                    <strong>Root Cause:</strong> {opportunity.root_cause}
-                </p>
+                {/* Opportunity Title */}
+                <h3 className="text-base font-bold text-foreground leading-snug mb-2">
+                    {opportunity.title}
+                </h3>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginTop: '15px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', backgroundColor: 'rgba(255,255,255,0.03)', padding: '10px', borderRadius: '8px' }}>
-                        <MessageSquare size={16} style={{ color: 'var(--primary)' }} />
-                        <div>
-                            <div style={{ fontSize: '0.7rem', opacity: 0.6 }}>Evidence</div>
-                            <div style={{ fontSize: '0.9rem', fontWeight: 'bold' }}>{uniqueMeetings} Meetings</div>
-                        </div>
-                    </div>
-
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', backgroundColor: 'rgba(255,255,255,0.03)', padding: '10px', borderRadius: '8px' }}>
-                        <TrendingDown size={16} style={{ color: '#ff4d4f' }} />
-                        <div>
-                            <div style={{ fontSize: '0.7rem', opacity: 0.6 }}>Sentiment Cost</div>
-                            <div style={{ fontSize: '0.9rem', fontWeight: 'bold', color: '#ff4d4f' }}>{opportunity.sentiment_impact}</div>
-                        </div>
-                    </div>
+                {/* Root Cause Note */}
+                <div className="p-3 rounded-lg bg-muted/40 border border-border/50 text-xs text-muted-foreground leading-relaxed mb-4">
+                    <span className="font-semibold text-foreground mr-1">Root Cause:</span>
+                    {opportunity.root_cause || "Recurring pattern detected across customer interviews."}
                 </div>
             </div>
 
-            <div className="card-footer" style={{ marginTop: '20px', borderTop: '1px solid var(--border)', paddingTop: '12px' }}>
-                <button className="btn btn-secondary" style={{ width: '100%', fontSize: '0.85rem' }}>
-                    View Cluster Details
-                </button>
+            <div>
+                {/* Metrics Grid */}
+                <div className="grid grid-cols-2 gap-2 mb-4">
+                    <div className="flex items-center gap-2.5 p-2.5 rounded-lg bg-card border border-border/60">
+                        <div className="p-1.5 rounded-md bg-indigo-50 text-indigo-600 dark:bg-indigo-950 dark:text-indigo-400">
+                            <MessageSquare size={14} />
+                        </div>
+                        <div>
+                            <div className="text-[10px] uppercase font-semibold text-muted-foreground">Evidence</div>
+                            <div className="text-xs font-bold text-foreground">{uniqueMeetings || 1} Calls</div>
+                        </div>
+                    </div>
+
+                    <div className="flex items-center gap-2.5 p-2.5 rounded-lg bg-card border border-border/60">
+                        <div className="p-1.5 rounded-md bg-rose-50 text-rose-600 dark:bg-rose-950 dark:text-rose-400">
+                            <TrendingDown size={14} />
+                        </div>
+                        <div>
+                            <div className="text-[10px] uppercase font-semibold text-muted-foreground">Impact</div>
+                            <div className="text-xs font-bold text-rose-600 dark:text-rose-400">
+                                {opportunity.sentiment_impact || "High Friction"}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Action Link */}
+                <Link
+                    href="/opportunities"
+                    className="w-full inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium border border-border bg-card hover:bg-muted text-foreground transition-colors"
+                >
+                    <span>Inspect Cluster & Evidence</span>
+                    <ArrowRight size={12} />
+                </Link>
             </div>
         </div>
     );

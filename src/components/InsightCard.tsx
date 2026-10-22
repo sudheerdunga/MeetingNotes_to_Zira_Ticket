@@ -1,18 +1,18 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { JiraButton } from "./JiraButton";
-import { AlertCircle, CheckCircle2, Info, Clock, ExternalLink } from "lucide-react";
+import { AlertCircle, CheckCircle2, Clock, ExternalLink, Bug, Flame, Sparkles, MessageSquare } from "lucide-react";
+import { parseInsight } from "@/components/dashboard/DashboardClient";
 
 interface Insight {
     id: string;
     meeting_id: string;
     issue: string;
-    severity: 'low' | 'medium' | 'high' | 'critical';
-    status: 'open' | 'resolved';
-    jira_ticket_id?: string;
+    severity: "low" | "medium" | "high" | "critical";
+    status: "open" | "resolved";
+    jira_ticket_id?: string | null;
     created_at: string;
 }
 
@@ -25,15 +25,14 @@ export function InsightCard({ initialInsight }: { initialInsight: Insight }) {
         const channel = supabase
             .channel(`insight-status-${insight.id}`)
             .on(
-                'postgres_changes',
+                "postgres_changes",
                 {
-                    event: 'UPDATE',
-                    schema: 'public',
-                    table: 'insights',
+                    event: "UPDATE",
+                    schema: "public",
+                    table: "insights",
                     filter: `id=eq.${insight.id}`,
                 },
                 (payload) => {
-                    console.log('Insight updated in real-time:', payload.new);
                     setInsight(payload.new as Insight);
                 }
             )
@@ -44,127 +43,102 @@ export function InsightCard({ initialInsight }: { initialInsight: Insight }) {
         };
     }, [insight.id, supabase]);
 
-    // Parsing the structured issue string
-    // Format: "[Type] Title: "Quote" (Timestamp)"
-    const parseIssue = (issueStr: string) => {
-        const typeMatch = issueStr.match(/^\[(.*?)\]/);
-        const type = typeMatch ? typeMatch[1] : "Insight";
+    const { category, title, quote, timestamp } = parseInsight(insight.issue);
 
-        const rest = issueStr.replace(/^\[.*?\]/, "").trim();
-        const parts = rest.split(':');
-        const title = parts[0]?.trim() || "Untitled Insight";
-
-        const content = parts.slice(1).join(':').trim();
-        const quoteMatch = content.match(/"(.*?)"/);
-        const quote = quoteMatch ? quoteMatch[1] : "";
-
-        const timestampMatch = content.match(/\(([\d:]+)\)/);
-        const timestamp = timestampMatch ? timestampMatch[1] : "";
-
-        return { type, title, quote, timestamp };
-    };
-
-    const { title, quote, timestamp } = parseIssue(insight.issue);
+    const categoryConfig = {
+        bug: {
+            label: "Bug",
+            icon: Bug,
+            pill: "bg-rose-50 text-rose-700 border-rose-200/80 dark:bg-rose-950/40 dark:text-rose-400 dark:border-rose-900/60",
+        },
+        friction: {
+            label: "UX Friction",
+            icon: Flame,
+            pill: "bg-amber-50 text-amber-700 border-amber-200/80 dark:bg-amber-950/40 dark:text-amber-400 dark:border-amber-900/60",
+        },
+        feature: {
+            label: "Feature Request",
+            icon: Sparkles,
+            pill: "bg-blue-50 text-blue-700 border-blue-200/80 dark:bg-blue-950/40 dark:text-blue-400 dark:border-blue-900/60",
+        },
+    }[category];
 
     const severityConfig = {
-        low: { color: "#2196f3", bg: "rgba(33, 150, 243, 0.1)", icon: Info },
-        medium: { color: "#ffab00", bg: "rgba(255, 171, 0, 0.1)", icon: Info },
-        high: { color: "#ff5722", bg: "rgba(255, 87, 34, 0.1)", icon: AlertCircle },
-        critical: { color: "#ff1744", bg: "rgba(255, 23, 68, 0.1)", icon: AlertCircle }
-    };
+        critical: "text-rose-700 bg-rose-50 border-rose-200 dark:bg-rose-950 dark:text-rose-300",
+        high: "text-orange-700 bg-orange-50 border-orange-200 dark:bg-orange-950 dark:text-orange-300",
+        medium: "text-amber-700 bg-amber-50 border-amber-200 dark:bg-amber-950 dark:text-amber-300",
+        low: "text-zinc-700 bg-zinc-50 border-zinc-200 dark:bg-zinc-800 dark:text-zinc-300",
+    }[insight.severity];
 
-    const config = severityConfig[insight.severity] || severityConfig.low;
-    const Icon = config.icon;
+    const CategoryIcon = categoryConfig.icon;
 
     return (
-        <div className="card" style={{ padding: '24px', border: `1px solid ${insight.status === 'resolved' ? 'var(--border)' : config.color + '44'}` }}>
-            <div className="card-header" style={{ marginBottom: '16px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <div style={{
-                        backgroundColor: config.bg,
-                        color: config.color,
-                        padding: '4px 10px',
-                        borderRadius: '20px',
-                        fontSize: '0.75rem',
-                        fontWeight: 700,
-                        textTransform: 'uppercase',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '4px'
-                    }}>
-                        <Icon size={12} />
-                        {insight.severity}
-                    </div>
-                    {insight.jira_ticket_id && insight.status === 'open' && (
-                        <div style={{ color: 'var(--primary)', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.75rem', fontWeight: 600 }}>
-                            <Clock size={12} />
-                            IN JIRA
-                        </div>
-                    )}
-                    {insight.status === 'resolved' && (
-                        <div style={{ color: '#00c853', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.75rem', fontWeight: 600 }}>
-                            <CheckCircle2 size={12} />
-                            RESOLVED
-                        </div>
-                    )}
-                </div>
-                <span style={{ fontSize: '0.8rem', opacity: 0.5 }} suppressHydrationWarning>
-                    {new Date(insight.created_at).toLocaleDateString()}
-                </span>
-            </div>
+        <div className="rounded-xl border border-border bg-card p-5 shadow-2xs hover:border-foreground/30 hover:shadow-xs transition-all flex flex-col justify-between">
+            <div>
+                {/* Header: Category + Severity + Jira */}
+                <div className="flex items-center justify-between gap-2 mb-3">
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                        <span className={`inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-md border uppercase tracking-wider ${categoryConfig.pill}`}>
+                            <CategoryIcon size={11} />
+                            {categoryConfig.label}
+                        </span>
 
-            <div className="card-content" style={{ opacity: 1, color: 'var(--foreground)' }}>
-                <h4 style={{ margin: '0 0 12px 0', fontSize: '1.1rem', fontWeight: 600 }}>
+                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border uppercase tracking-wider ${severityConfig}`}>
+                            {insight.severity}
+                        </span>
+                    </div>
+
+                    <span className="text-[11px] text-muted-foreground font-mono" suppressHydrationWarning>
+                        {new Date(insight.created_at).toLocaleDateString(undefined, {
+                            month: "short",
+                            day: "numeric",
+                        })}
+                    </span>
+                </div>
+
+                {/* Title */}
+                <h4 className="text-sm font-bold text-foreground leading-snug mb-2">
                     {title}
                 </h4>
 
+                {/* Verbatim quote */}
                 {quote && (
-                    <blockquote style={{
-                        margin: '0 0 16px 0',
-                        paddingLeft: '12px',
-                        borderLeft: `2px solid ${config.color}`,
-                        fontStyle: 'italic',
-                        opacity: 0.8,
-                        fontSize: '0.95rem'
-                    }}>
-                        &quot;{quote}&quot;
-                    </blockquote>
+                    <div className="p-3 rounded-lg bg-muted/40 border-l-2 border-foreground/30 text-xs text-muted-foreground italic leading-relaxed mb-3">
+                        &ldquo;{quote}&rdquo;
+                    </div>
                 )}
 
                 {timestamp && (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '0.85rem', opacity: 0.6, marginBottom: '16px' }}>
-                        <Clock size={14} />
+                    <div className="flex items-center gap-1 text-[11px] text-muted-foreground mb-3 font-mono">
+                        <Clock size={11} />
                         <span>Happened at {timestamp}</span>
                     </div>
                 )}
             </div>
 
-            <div style={{ marginTop: 'auto', paddingTop: '16px', borderTop: '1px solid var(--border)' }}>
+            {/* Footer / Actions */}
+            <div className="pt-3 border-t border-border/50 mt-auto">
                 {insight.jira_ticket_id ? (
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div className="flex items-center justify-between">
+                        <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+                            <CheckCircle2 size={13} />
+                            In Jira: {insight.jira_ticket_id}
+                        </span>
                         <a
                             href={`https://atlassian.net/browse/${insight.jira_ticket_id}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="btn btn-secondary"
-                            style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '8px',
-                                color: 'var(--primary)',
-                                textDecoration: 'none',
-                                fontSize: '0.85rem'
-                            }}
+                            className="inline-flex items-center gap-1 text-xs font-medium text-foreground hover:underline"
                         >
-                            <ExternalLink size={14} />
-                            Jira: {insight.jira_ticket_id}
+                            <span>Open</span>
+                            <ExternalLink size={11} />
                         </a>
-                        <div style={{ fontSize: '0.75rem', color: '#00c853', fontWeight: 600 }}>
-                            Linked
-                        </div>
                     </div>
                 ) : (
-                    <JiraButton insightId={insight.id} hasTicket={false} />
+                    <div className="flex items-center justify-between gap-2">
+                        <span className="text-xs text-muted-foreground">Unsynced</span>
+                        <JiraButton insightId={insight.id} hasTicket={false} />
+                    </div>
                 )}
             </div>
         </div>
